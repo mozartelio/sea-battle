@@ -46,7 +46,7 @@ for k in range(1, 3):
 
 # print(map_data["1"][0][8])
 
-
+######
 
 def draw_ships():
     x_block_center= LEFT_INDENT + BLOCK_SIZE / 2
