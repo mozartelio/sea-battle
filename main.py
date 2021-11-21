@@ -2,7 +2,7 @@ import pygame
 import random
 import json
 from enum import Enum
-
+import sys
 
 class Map_cell_state(Enum):
     EMPTY_STATE = 0
@@ -29,6 +29,7 @@ BLOCK_SIZE = 20
 LEFT_INDENT = 100
 UPPER_INDENT = 10
 
+MAP_NUMBER = str(2)
 
 our_first_map_file = open('maps.json', )
 
@@ -44,6 +45,9 @@ for k in range(1, 3):
 
     print('\n')
 
+
+
+
 # print(map_data["1"][0][8])
 
 ######
@@ -51,20 +55,42 @@ for k in range(1, 3):
 def draw_ships():
     x_block_center= LEFT_INDENT + BLOCK_SIZE / 2
     y_block_center= UPPER_INDENT + BLOCK_SIZE / 2
+    circle_radius=8
+
+
+    img_vertical_top_edge = pygame.transform.scale(pygame.image.load('assets/VERTICAL_TOP_EDGE.png'), (16, 16))
+    img_vertical_bottom_edge = pygame.transform.scale(pygame.image.load('assets/VERTICAL_BOTTOM_EDGE.png'), (16, 16))
+
+    img_horizontal_left_edge = pygame.transform.scale(pygame.image.load('assets/HORIZONTAL_LEFT_EDGE.png'), (16, 16))
+    img_horizontal_right_edge = pygame.transform.scale(pygame.image.load('assets/HORIZONTAL_RIGHT_EDGE.png'), (16, 16))
 
     for x  in range(0, NUMBER_OF_CELLS):
         for y  in range(0, NUMBER_OF_CELLS):
-            # print(str(x_block_center) + ", " + str(y_block_center))
 
-            if all_maps_data["1"][x][y]=="1":
-                pygame.draw.circle(screen, BLACK, (x_block_center, y_block_center), 7)
-                pygame.display.update()
+            if all_maps_data[MAP_NUMBER][y][x] == str(Map_cell_state.LONELY_SHIP_STATE.value):
+                pygame.draw.circle(screen, BLACK, (x_block_center, y_block_center), circle_radius)
 
+            elif all_maps_data[MAP_NUMBER][y][x] == str(Map_cell_state.MIDDLE_SHIP_SECTION.value):
+                pygame.draw.rect(screen, BLACK, (x_block_center - 7, y_block_center - 7, 15, 15))
+
+            elif all_maps_data[MAP_NUMBER][y][x] == str(Map_cell_state.VERTICAL_TOP_EDGE.value):
+                screen.blit(img_vertical_top_edge,(x_block_center-circle_radius, y_block_center-circle_radius ))
+
+            elif all_maps_data[MAP_NUMBER][y][x] == str(Map_cell_state.VERTICAL_BOTTOM_EDGE.value):
+                screen.blit(img_vertical_bottom_edge,(x_block_center-circle_radius, y_block_center-circle_radius ))
+
+            elif all_maps_data[MAP_NUMBER][y][x] == str(Map_cell_state.HORIZONTAL_LEFT_EDGE.value):
+                screen.blit(img_horizontal_left_edge, (x_block_center - circle_radius, y_block_center - circle_radius))
+
+            elif all_maps_data[MAP_NUMBER][y][x] == str(Map_cell_state.HORIZONTAL_RIGHT_EDGE.value):
+                screen.blit(img_horizontal_right_edge, (x_block_center - circle_radius, y_block_center - circle_radius))
+            elif all_maps_data[MAP_NUMBER][y][x] != str(Map_cell_state.EMPTY_STATE.value):
+                sys.stderr.write('Problem in draw_ships(), not declared new cell state!\n')
+                
             y_block_center= y_block_center + BLOCK_SIZE
 
         y_block_center= UPPER_INDENT + BLOCK_SIZE / 2
         x_block_center= x_block_center + BLOCK_SIZE
-
     pygame.display.update()
 
 
@@ -132,10 +158,15 @@ def main():
 
     game_state=Game_state.PLAYING
 
-    game_over = False
     screen.fill(WHITE)
     draw_grid()
     pygame.display.update()
+
+    # map_to_state_transfer()
+    # for i in range(0,10):
+    #     for z in range (0,10):
+    #         print(str(arr[z][i].value) + " " , end='')
+    #     print('\n')
 
     draw_ships()
     pygame.display.update()
