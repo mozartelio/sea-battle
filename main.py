@@ -1,3 +1,4 @@
+import f1 as f1
 import pygame
 import random
 import json
@@ -39,6 +40,12 @@ our_first_map_file = open('maps.json', )
 all_maps_data = json.load(our_first_map_file)
 all_maps_data_copy = all_maps_data.copy()
 
+img_vertical_top_edge = pygame.transform.scale(pygame.image.load('assets/VERTICAL_TOP_EDGE.png'), (16, 16))
+img_vertical_bottom_edge = pygame.transform.scale(pygame.image.load('assets/VERTICAL_BOTTOM_EDGE.png'), (16, 16))
+
+img_horizontal_left_edge = pygame.transform.scale(pygame.image.load('assets/HORIZONTAL_LEFT_EDGE.png'), (16, 16))
+img_horizontal_right_edge = pygame.transform.scale(pygame.image.load('assets/HORIZONTAL_RIGHT_EDGE.png'), (16, 16))
+
 for k in range(1, 3):
     for x in range(0, NUMBER_OF_CELLS):
         for y in range(0, NUMBER_OF_CELLS):
@@ -53,6 +60,28 @@ for k in range(1, 3):
 
 vertical_ship_counter = [0] * NUMBER_OF_CELLS
 horizontal_ship_counter = [0] * NUMBER_OF_CELLS
+
+def flotila_plavidel(screen, img_horizontal_left_edge,img_horizontal_right_edge):
+    font = pygame.font.SysFont('arial', font_size)
+    text = font.render('Flotila plavidel:', True, BLACK)
+    textRect = text.get_rect()
+    textRect.center = (7*LEFT_INDENT,UPPER_INDENT)
+    screen.blit(text, textRect)
+    for i in range(1, NUMBER_OF_CELLS):
+        if i < 7:
+            screen.blit(img_horizontal_left_edge, (6.65* LEFT_INDENT, UPPER_INDENT + i * BLOCK_SIZE-5))
+            if i < 4:
+                pygame.draw.rect(screen, BLACK, (int(6.75*LEFT_INDENT + 9), int(UPPER_INDENT + i * BLOCK_SIZE-4), 15, 15))
+                if i < 2:
+                    pygame.draw.rect(screen, BLACK,(int(6.75 * LEFT_INDENT + 27), int(UPPER_INDENT + i * BLOCK_SIZE - 4), 15, 15))
+                    screen.blit(img_horizontal_right_edge,(6.65 * LEFT_INDENT + 54, UPPER_INDENT + i * BLOCK_SIZE - 5))
+                if i > 1 and i < 4:
+                    screen.blit(img_horizontal_right_edge,(6.65 * LEFT_INDENT + 36.5, UPPER_INDENT + i * BLOCK_SIZE - 5))
+            if i > 3 and i < 7:
+                screen.blit(img_horizontal_right_edge, (6.65 * LEFT_INDENT + 18.5, UPPER_INDENT + i * BLOCK_SIZE - 5))
+        if i > 5:
+            pygame.draw.circle(screen, BLACK, (6.75*LEFT_INDENT, UPPER_INDENT + (i+1)* BLOCK_SIZE+2), 8)
+
 
 def fill_vertical_or_horizontal_ship_counter(vertical):
     for row in range(0, NUMBER_OF_CELLS):
@@ -219,7 +248,7 @@ def draw_grid():
 
 
 
-size = (LEFT_INDENT + 30 * BLOCK_SIZE, UPPER_INDENT + 15 * BLOCK_SIZE)
+size = (LEFT_INDENT + 40 * BLOCK_SIZE, UPPER_INDENT + 15 * BLOCK_SIZE)
 pygame.init()
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Lode")
@@ -233,6 +262,7 @@ def main():
     screen.fill(WHITE)
     fill_vertical_or_horizontal_ship_counter(vertical=False)
     fill_vertical_or_horizontal_ship_counter(vertical=True)
+    flotila_plavidel(screen,img_horizontal_left_edge, img_horizontal_right_edge)
     draw_grid()
     pygame.display.update()
 
