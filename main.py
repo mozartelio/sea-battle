@@ -37,6 +37,7 @@ MAP_NUMBER = str(1)
 our_first_map_file = open('maps.json', )
 
 all_maps_data = json.load(our_first_map_file)
+all_maps_data_copy = all_maps_data.copy()
 
 for k in range(1, 3):
     for x in range(0, NUMBER_OF_CELLS):
@@ -48,7 +49,7 @@ for k in range(1, 3):
 
 # print(map_data["1"][0][8])
 
-######
+
 
 vertical_ship_counter = [0] * NUMBER_OF_CELLS
 horizontal_ship_counter = [0] * NUMBER_OF_CELLS
@@ -72,6 +73,62 @@ def fill_vertical_or_horizontal_ship_counter(vertical):
                     sys.stderr.write('Problem in fill_vertical_or_horizontal_ship_counter(), ' +
                                      'not declared new cell state with number:' +
                                      str(all_maps_data[MAP_NUMBER][column][row]) + '\n')
+
+
+
+dfska_field =[["0" for x in range(NUMBER_OF_CELLS)] for y in range(NUMBER_OF_CELLS)]
+# 'x' as cross
+def cross_maker():
+    for row in range(0, NUMBER_OF_CELLS):
+        for column in range(0, NUMBER_OF_CELLS):
+
+            if horizontal_ship_counter[column]==0 and dfska_field[row][column]!="x":
+                dfska_field[row][column] = "x"
+            if vertical_ship_counter[row]==0 and dfska_field[row][column] != "x":
+                dfska_field[row][column] = "x"
+            else:
+                # match int(all_maps_data[MAP_NUMBER][row][column]):
+                    # case:
+
+
+                for xr in range(0, NUMBER_OF_CELLS):
+                    for yr in range(0, NUMBER_OF_CELLS):
+                        print(str(dfska_field[xr][yr]) + " ", end='')
+                    print('\n')
+                print('\n')
+                print("row: " + str(row) + " column: " + str(column))
+
+
+######
+def treeer():
+    for i in range(0, NUMBER_OF_CELLS):
+        for j in range(0, NUMBER_OF_CELLS):
+            if (int(all_maps_data_copy[MAP_NUMBER][i][j])) != 0:
+                # count+=1
+                dfska(i, j)
+
+
+# def dfska():
+
+
+# def dfs(i, j):
+#     if i < 0 or i >= NUMBER_OF_CELLS or j < 0 or j >= NUMBER_OF_CELLS or all_maps_data_copy[MAP_NUMBER][i][j] == 0:
+#         return
+#     all_maps_data_copy[MAP_NUMBER][i][j] = 0
+#     dfs(i + 1, j)
+#     dfs(i - 1, j)
+#     dfs(i, j + 1)
+#     dfs(i, j - 1)
+
+
+# def board_mover():
+#     count=0
+#     for i in range (0, NUMBER_OF_CELLS):
+#         for j in range (0, NUMBER_OF_CELLS):
+#             if(int(all_maps_data_copy[MAP_NUMBER][i][j]))!=0:
+#                 count+=1
+#                 dfs(i,j)
+######
 
 
 def draw_ships():
@@ -187,6 +244,20 @@ def main():
 
     draw_ships()
     pygame.display.update()
+
+    # print('\n')
+    # print(vertical_ship_counter)
+    # cross_maker()
+
+    # board_mover()
+    # print(all_maps_data_copy)
+
+    for xq in range(0, NUMBER_OF_CELLS):
+        for yq in range(0, NUMBER_OF_CELLS):
+            print(str(all_maps_data_copy[MAP_NUMBER][xq][yq]) + " ", end='')
+        print('\n')
+
+    # print('\n')
 
     while game_state == Game_state.PLAYING:
         for event in pygame.event.get():
