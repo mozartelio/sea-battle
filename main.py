@@ -1,6 +1,4 @@
-import f1 as f1
 import pygame
-import random
 import json
 from enum import Enum
 import sys
