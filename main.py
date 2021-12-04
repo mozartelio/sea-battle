@@ -20,6 +20,34 @@ class Game_state(Enum):
     SOLVED = 2
     FAILED = 3
 
+class Button:
+    def __init__(self,width, height):
+        self.width=width
+        self.height=height
+        self.inactive_color=(23,204,58)
+        self.active_color = (13, 162, 58)
+
+
+    def draw(self,x,y,message,action=None):
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+        if x < mouse[0] < x + self.width:
+            if y < mouse[1] < y + self.height:
+                pygame.draw.rect(screen, self.active_color,(x,y,self.width,self.height))
+                if click[0]==1:
+                    if action is not None:
+                        action()
+                        #TODO: ...
+        else:
+            pygame.draw.rect(screen, self.inactive_color, (x, y, self.width, self.height))
+        font = pygame.font.SysFont('arial', font_size)
+        text = font.render(message, True, BLACK)
+        textRect = text.get_rect()
+        textRect.center = (x+48,y+20)
+        screen.blit(text, textRect)
+
+
+
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -73,7 +101,7 @@ def flotila_plavidel(screen, img_horizontal_left_edge,img_horizontal_right_edge)
                 if i < 2:
                     pygame.draw.rect(screen, BLACK,(int(6.75 * LEFT_INDENT + 27), int(UPPER_INDENT + i * BLOCK_SIZE - 4), 15, 15))
                     screen.blit(img_horizontal_right_edge,(6.65 * LEFT_INDENT + 54, UPPER_INDENT + i * BLOCK_SIZE - 5))
-                if i > 1 and i < 4:
+                if i > 1:
                     screen.blit(img_horizontal_right_edge,(6.65 * LEFT_INDENT + 36.5, UPPER_INDENT + i * BLOCK_SIZE - 5))
             if i > 3 and i < 7:
                 screen.blit(img_horizontal_right_edge, (6.65 * LEFT_INDENT + 18.5, UPPER_INDENT + i * BLOCK_SIZE - 5))
@@ -127,12 +155,12 @@ def cross_maker():
 
 
 ######
-def treeer():
+'''def treeer():
     for i in range(0, NUMBER_OF_CELLS):
         for j in range(0, NUMBER_OF_CELLS):
             if (int(all_maps_data_copy[MAP_NUMBER][i][j])) != 0:
                 # count+=1
-                dfska(i, j)
+                dfska(i, j)'''
 
 
 # def dfska():
@@ -246,7 +274,7 @@ def draw_grid():
 
 
 
-size = (LEFT_INDENT + 40 * BLOCK_SIZE, UPPER_INDENT + 15 * BLOCK_SIZE)
+size = (LEFT_INDENT + 43 * BLOCK_SIZE, UPPER_INDENT + 15 * BLOCK_SIZE)
 pygame.init()
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Lode")
@@ -262,6 +290,11 @@ def main():
     fill_vertical_or_horizontal_ship_counter(vertical=True)
     flotila_plavidel(screen,img_horizontal_left_edge, img_horizontal_right_edge)
     draw_grid()
+    button=Button(100,45)
+    button.draw(800,20, 'DFS')
+    button.draw(800, 80, 'no name')
+    button.draw(800, 140, 'no name')
+    button.draw(800, 200, 'Reset')
     pygame.display.update()
 
     # map_to_state_transfer()

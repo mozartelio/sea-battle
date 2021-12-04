@@ -30,11 +30,11 @@ class DFS:
                 array.append(i)
                 self.iterations += 1
                 print("Iterations: " + str(self.iterations))
-                # print(array)
+                #print(array)
                 for xqr in range(0, len(array) - 1):
                     if array[xqr]:
                         print("1" + " ", end='')
-                        # print(str(dfska_field[xq][yq]) + " ", end='')
+                        #print(str(dfska_field[xq][yq]) + " ", end='')
                     else:
                         print("0" + " ", end='')
                 for df in range(0, self.NUMBER_OF_CELLS * self.NUMBER_OF_CELLS - (len(array) - 1)):
