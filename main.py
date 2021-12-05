@@ -6,7 +6,7 @@ import sys
 
 from gui import *
 
-MAP_NUMBER = str(1)
+MAP_NUMBER = str(3)
 NUMBER_OF_CELLS = 10
 
 our_first_map_file = open('maps.json', )
