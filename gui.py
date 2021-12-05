@@ -132,12 +132,9 @@ class Gui:
 
         pygame.display.update()
 
-
+    '''to draw ships' field which с'''
     def draw_ships_algorithm(self,array_to_compare):
-
-
         row_block_center = self.UPPER_INDENT + self.BLOCK_SIZE / 2
-        # column_block_center = self.UPPER_INDENT + self.BLOCK_SIZE / 2
         column_block_center = self.UPPER_INDENT + self.BLOCK_SIZE*20
 
         circle_radius = 8
@@ -158,8 +155,7 @@ class Gui:
         for x in range(0, self.NUMBER_OF_CELLS):
             for y in range(0, self.NUMBER_OF_CELLS):
                 if array_to_compare[x*self.NUMBER_OF_CELLS+y]:
-                    # pygame.draw.circle(self.screen, self.BLACK, (row_block_center, column_block_center), circle_radius * 10)
-                    pygame.display.update()
+                    # pygame.display.update()
                     pygame.draw.circle(self.screen, self.BLACK, (column_block_center,row_block_center), circle_radius)
                 else:
                     pygame.draw.circle(self.screen, self.WHITE, (column_block_center,row_block_center), circle_radius)
@@ -169,7 +165,6 @@ class Gui:
             row_block_center = row_block_center + self.BLOCK_SIZE
             print("row_block_center in cycle: " + str(row_block_center))
             print("column_block_center in cycle: " + str(column_block_center))
-        # pygame.draw.circle(self.screen, self.BLACK, (row_block_center, column_block_center), circle_radius * 20)
         pygame.display.update()
 
 
