@@ -38,6 +38,8 @@ class Gui:
         self.img_horizontal_left_edge = pygame.transform.scale(pygame.image.load('assets/HORIZONTAL_LEFT_EDGE.png'), (16, 16))
         self.img_horizontal_right_edge = pygame.transform.scale(pygame.image.load('assets/HORIZONTAL_RIGHT_EDGE.png'), (16, 16))
 
+        self.img_cross = pygame.transform.scale(pygame.image.load('assets/CROSS.png'), (16, 16))
+
         self.vertical_ship_counter = [0] * self.NUMBER_OF_CELLS
         self.horizontal_ship_counter = [0] * self.NUMBER_OF_CELLS
 
@@ -155,10 +157,14 @@ class Gui:
         for x in range(0, self.NUMBER_OF_CELLS):
             for y in range(0, self.NUMBER_OF_CELLS):
                 if array_to_compare[x*self.NUMBER_OF_CELLS+y]:
-                    # pygame.display.update()
+                    # pygame.draw.circle(self.screen, self.BLACK, (row_block_center, column_block_center), circle_radius * 10)
+                    pygame.display.update()
+                    pygame.draw.rect(self.screen, self.WHITE,(column_block_center - circle_radius, row_block_center - circle_radius, 17, 17))
                     pygame.draw.circle(self.screen, self.BLACK, (column_block_center,row_block_center), circle_radius)
                 else:
-                    pygame.draw.circle(self.screen, self.WHITE, (column_block_center,row_block_center), circle_radius)
+                    pygame.draw.rect(self.screen, self.WHITE, (column_block_center - circle_radius, row_block_center - circle_radius, 17,17))
+                    self.screen.blit(self.img_cross,(column_block_center - circle_radius, row_block_center - circle_radius))
+
                 column_block_center = column_block_center +self.BLOCK_SIZE
 
             column_block_center = self.UPPER_INDENT + self.BLOCK_SIZE*20
