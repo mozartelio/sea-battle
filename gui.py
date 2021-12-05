@@ -253,5 +253,5 @@ class Button:
         font = pygame.font.SysFont('arial', self.font_size)
         text = font.render(self.text, True, self.BLACK)
         text_rectangle = text.get_rect()
-        text_rectangle.center = (x + 48, y + 20)
+        text_rectangle.center = (x + 60, y + 20)
         self.screen.blit(text, text_rectangle)

@@ -7,7 +7,7 @@ import time
 
 from gui import *
 
-MAP_NUMBER = str(3)
+MAP_NUMBER = str(2)
 NUMBER_OF_CELLS = 10
 
 our_first_map_file = open('maps.json', )
@@ -117,10 +117,17 @@ def checker():
     print("PaIZKKKDFAS")
     dfs_store.dfs()
     time_after=time.time()
-
     print("Time difference (s): " + str(time_after-time_before))
     # gui.draw_ships_algorithm(np.array(checking_array).flatten())
 
+def mrv_backtracking():
+    print("mrv_backtracking")
+def lcv_backtracking():
+    print("lcv_backtracking")
+def mrv_forward_checking():
+    print("mrv_forward_checking")
+def lcv_forward_checking():
+    print("lcv_forward_checking")
 
 def main():
     game_state = Game_state.PLAYING
@@ -132,13 +139,16 @@ def main():
     gui.draw_grid()
 
     print(str(dfs_store.one_dimensional_answer_field))
-    buttonDFS = Button(gui.screen, gui.BLOCK_SIZE,100, 45, 'DFS', checker)
-    buttonMRV = Button(gui.screen, gui.BLOCK_SIZE, 100, 45, 'MRV', print('MRV'))
-    # buttonLCV = Button(100, 45)
-    # buttonMRV = Button(100, 45)
+    buttonDFS = Button(gui.screen, gui.BLOCK_SIZE,120, 45, 'DFS+backtracking', checker)
+    buttonMRV_back = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'MRV+backtracking', mrv_backtracking)
+    buttonLCV_back = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'LCV+backtracking', lcv_backtracking)
+    buttonMRV_forward = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'MRV+forward checking', mrv_forward_checking)
+    buttonLCV_forward = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'LCV+forward checking', lcv_forward_checking)
     buttonDFS.draw(800, 20)
-    buttonMRV.draw(800, 80)
-    # button.draw(800, 140, 'no name',None)
+    buttonMRV_back.draw(800, 80)
+    buttonMRV_forward.draw(800, 140)
+    buttonLCV_back.draw(800, 200)
+    buttonLCV_forward.draw(800, 260)
     # button.draw(800, 200, 'Reset',None)
     # pygame.display.update()
 
@@ -172,20 +182,23 @@ def main():
             #
             if event.type == pygame.MOUSEBUTTONDOWN:
                 buttonDFS.draw(800, 20)
-                buttonMRV.draw(800, 80)
-            #     button.draw(800, 20, 'DFS', print("OPA4A"))
-            #     button.draw(800, 80, 'no name', None)
-            #     button.draw(800, 140, 'no name', None)
+                buttonMRV_back.draw(800, 80)
+                buttonMRV_forward.draw(800, 140)
+                buttonLCV_back.draw(800, 200)
+                buttonLCV_forward.draw(800, 260)
             #     button.draw(800, 200, 'Reset', None)
             #     pygame.display.update()
             if event.type == pygame.MOUSEMOTION:
                 buttonDFS.draw(800, 20)
-                buttonMRV.draw(800, 80)
+                buttonMRV_back.draw(800, 80)
+                buttonMRV_forward.draw(800, 140)
+                buttonLCV_back.draw(800, 200)
+                buttonLCV_forward.draw(800, 260)
                 # button.draw(800, 20, 'DFS', checker())
                 # button.draw(800, 80, 'no name', None)
                 # button.draw(800, 140, 'no name', None)
                 # button.draw(800, 200, 'Reset', None)
-                pygame.display.update()
+            pygame.display.update()
 
 
 main()
