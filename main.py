@@ -3,6 +3,7 @@ import pygame
 import json
 from enum import Enum
 import sys
+import time
 
 from gui import *
 
@@ -112,8 +113,12 @@ gui=Gui(NUMBER_OF_CELLS,all_maps_data[MAP_NUMBER])
 dfs_store=DFS(NUMBER_OF_CELLS, checking_array, gui)
 
 def checker():
+    time_before=time.time()
     print("PaIZKKKDFAS")
     dfs_store.dfs()
+    time_after=time.time()
+
+    print("Time difference (s): " + str(time_after-time_before))
     # gui.draw_ships_algorithm(np.array(checking_array).flatten())
 
 
