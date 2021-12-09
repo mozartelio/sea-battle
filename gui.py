@@ -18,7 +18,7 @@ class Gui:
         self.BLOCK_SIZE = 20
         self.LEFT_INDENT = 100
         self.UPPER_INDENT = 10
-        self.size = (self.LEFT_INDENT + 43 * self.BLOCK_SIZE, self.UPPER_INDENT + 15 * self.BLOCK_SIZE)
+        self.size = (self.LEFT_INDENT + 43 * self.BLOCK_SIZE, self.UPPER_INDENT + 22 * self.BLOCK_SIZE)
         pygame.init()
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Lode")
