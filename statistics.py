@@ -15,11 +15,11 @@ class Statistics:
 
     def print_stats(self,time_complexity,memory_complexity,iterations,name_of_alg):
 
-        text_t = self.font.render('Time complexity '+name_of_alg +' (s): '+ str(time_complexity), True, self.BLACK)
+        text_t = self.font.render('Time complexity '+name_of_alg +' (seconds): '+ str(time_complexity), True, self.BLACK)
         textRect_t = text_t.get_rect()
         textRect_t.center = (2 * self.LEFT_INDENT,30 * self.UPPER_INDENT)
         self.screen.blit(text_t, textRect_t)
-        text_m = self.font.render('Memory complexity ' + name_of_alg + ' (b): ' + str(memory_complexity), True, self.BLACK)
+        text_m = self.font.render('Memory complexity ' + name_of_alg + ' (bytes): ' + str(memory_complexity), True, self.BLACK)
         textRect_m = text_m.get_rect()
         textRect_m.center = (2 * self.LEFT_INDENT - 37, 32 * self.UPPER_INDENT)
         self.screen.blit(text_m, textRect_m)

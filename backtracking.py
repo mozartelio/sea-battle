@@ -1,92 +1,86 @@
 import sys
 from enum import Enum
 import numpy as np
+
 from gui import *
-from pympler import asizeof
+
 
 class Orientation(Enum):
     HORIZONTAL =0
     VERTICAL = 1
 
 
-class ForwardChecking:
-    def __init__(self,number_of_cells,all_map_data,gui, MRV = None, LCV = None):
+class Backtracking:
+    def __init__(self, number_of_cells, all_map_data, gui, MRV=None, LCV=None):
         if LCV and MRV:
-            sys.stderr.write("OOOps, problems ForwardChecking __init__() lcv=mrv=True...\n")
+            sys.stderr.write("OOOps, problems Backtracking __init__() lcv=mrv=True...\n")
             return
-        self.empty_mark=0
-        self.ship_mark= 1
+        self.empty_mark = 0
+        self.ship_mark = 1
 
-        self.all_map_data=all_map_data
-        self.mrv=MRV
-        self.lcv=LCV
+        self.all_map_data = all_map_data
+        self.mrv = MRV
+        self.lcv = LCV
         self.NUMBER_OF_CELLS = number_of_cells
-        self.two_dimensional_answer_field=all_map_data["map"]
-        self.converted_two_dimensional_answer_field=[]
+        self.two_dimensional_answer_field = all_map_data["map"]
+        self.converted_two_dimensional_answer_field = []
         self.GAME_SOLVED = False
         self.iterations = 0
-        self.generated_array = [[self.empty_mark for x in range(self.NUMBER_OF_CELLS)] for y in range(self.NUMBER_OF_CELLS)]
+        self.generated_array = [[self.empty_mark for x in range(self.NUMBER_OF_CELLS)] for y in
+                                range(self.NUMBER_OF_CELLS)]
 
-        self.gui=gui
+        self.gui = gui
         self.vertical_ship_total = gui.vertical_ship_counter
         self.horizontal_ship_total = gui.horizontal_ship_counter
-        self.vertical_ship_counter=[0]*self.NUMBER_OF_CELLS
-        self.horizontal_ship_counter=[0]*self.NUMBER_OF_CELLS
+        self.vertical_ship_counter = [0] * self.NUMBER_OF_CELLS
+        self.horizontal_ship_counter = [0] * self.NUMBER_OF_CELLS
 
-        self.ships_to_place=sorted(all_map_data["ships"]) if self.lcv else (sorted(all_map_data["ships"], reverse=True) if self.mrv else None)
+        self.ships_to_place = sorted(all_map_data["ships"]) if self.lcv else (
+            sorted(all_map_data["ships"], reverse=True) if self.mrv else None)
 
         self.ship_start_row_posit = []
         self.ship_start_col_posit = []
         self.ship_start_pos_orien = []
-        self.size = 0
-
 
     def reset(self):
-        self.GAME_SOLVED=False
+        self.GAME_SOLVED = False
         self.iterations = 0
         # at the same time cleans counters and a generated array
         for i in range(0, len(self.generated_array)):
-            self.vertical_ship_counter[i]=0
-            self.horizontal_ship_counter[i]=0
+            self.vertical_ship_counter[i] = 0
+            self.horizontal_ship_counter[i] = 0
             for column in range(0, len(self.generated_array)):
-                self.generated_array[i][column]= self.empty_mark
-        self.ships_to_place=sorted(self.all_map_data["ships"]) if self.lcv else (sorted(self.all_map_data["ships"], reverse=True) if self.mrv else None)
+                self.generated_array[i][column] = self.empty_mark
+        self.ships_to_place = sorted(self.all_map_data["ships"]) if self.lcv else (
+            sorted(self.all_map_data["ships"], reverse=True) if self.mrv else None)
         self.ship_start_row_posit = []
         self.ship_start_col_posit = []
         self.ship_start_pos_orien = []
-        self.size=0
-
 
 
     def convert_to_binary_map(self):
-        self.size= asizeof.asizeof(self.empty_mark) + asizeof.asizeof(self.ship_mark) + asizeof.asizeof(self.all_map_data)+\
-            +asizeof.asizeof(self.mrv)+asizeof.asizeof(self.lcv)+ asizeof.asizeof(self.NUMBER_OF_CELLS)+asizeof.asizeof(self.two_dimensional_answer_field)+ \
-            +asizeof.asizeof(self.converted_two_dimensional_answer_field)+asizeof.asizeof(self.GAME_SOLVED)+asizeof.asizeof(self.iterations)+\
-            +asizeof.asizeof(self.generated_array)+asizeof.asizeof(self.vertical_ship_total)+asizeof.asizeof(self.horizontal_ship_total)+\
-           +asizeof.asizeof(self.vertical_ship_counter)+asizeof.asizeof(self.horizontal_ship_counter)+asizeof.asizeof(self.ships_to_place)+ \
-                   +asizeof.asizeof(self.ship_start_row_posit)+asizeof.asizeof(self.ship_start_col_posit)+asizeof.asizeof(self.ship_start_pos_orien)+ \
-                   +asizeof.asizeof(self.size)
         if self.mrv:
             print("mrv")
         if self.lcv:
             print("lcv")
         # print("length is: " + str(len(two_dimensional_answer_field)))
-        field = [[0 for xa in range(len(self.two_dimensional_answer_field))] for ya in range(len(self.two_dimensional_answer_field))]
+        field = [[0 for xa in range(len(self.two_dimensional_answer_field))] for ya in
+                 range(len(self.two_dimensional_answer_field))]
         # print("length 1 is: " + str(len(two_dimensional_answer_field)))
         for row in range(0, len(self.two_dimensional_answer_field)):
             for column in range(0, len(self.two_dimensional_answer_field)):
                 # print("length. row" + str(row) + "column"+ str(column) + str(len(two_dimensional_answer_field)))
-                if self.two_dimensional_answer_field[row][column]== "0":
-                    field[row][column]=0
+                if self.two_dimensional_answer_field[row][column] == "0":
+                    field[row][column] = 0
                     print("0 ", end="")
                 elif 1 <= int(self.two_dimensional_answer_field[row][column]) <= 6:
-                    field[row][column]=1
+                    field[row][column] = 1
                     print("1 ", end="")
-                else: sys.stderr.write("OOOps, problems convert_to_binary_map()...")
+                else:
+                    sys.stderr.write("OOOps, problems convert_to_binary_map()...")
             print()
         print("converted successfully")
-        self.converted_two_dimensional_answer_field= field
-        self.size += asizeof.asizeof(field)
+        self.converted_two_dimensional_answer_field = field
 
 
     def array_comparator(self):
@@ -94,16 +88,17 @@ class ForwardChecking:
         print()
         for x in range(0, self.NUMBER_OF_CELLS):
             for y in range(0, self.NUMBER_OF_CELLS):
-                if self.generated_array[x][y]==1:
+                if self.generated_array[x][y] == 1:
                     print("1" + " ", end='')
-                    #print(str(dfska_field[xq][yq]) + " ", end='')
+                    # print(str(dfska_field[xq][yq]) + " ", end='')
                 else:
                     print("0" + " ", end='')
             print()
         print()
 
-        print("ships NOT placed: "+ str(self.ships_to_place))
-        if len(self.ships_to_place)==0:
+        print("ships NOT placed: " + str(self.ships_to_place))
+        if len(self.ships_to_place) == 0:
+            self.gui.draw_ships_algorithm(self.generated_array, dimension=2)
             # self.GAME_SOLVED = True
             # print("GAME SOLVED .ships_to_place==0: top !!!")
             # for row in range(self.NUMBER_OF_CELLS):
@@ -121,39 +116,32 @@ class ForwardChecking:
             if self.generated_array == self.converted_two_dimensional_answer_field:
                 self.GAME_SOLVED = True
                 print("GAME auauuauauauauaua!!!")
-        self.gui.draw_ships_algorithm(self.generated_array,dimension=2)
 
         # if self.respects_indicators():
         # if np.array_equal(np.array(self.generated_array),np.array(self.converted_two_dimensional_answer_field)):
-        if self.generated_array==self.converted_two_dimensional_answer_field:
+        if self.generated_array == self.converted_two_dimensional_answer_field:
             self.GAME_SOLVED = True
             print("GAME SOLVED!!!")
             return True
         return False
-
 
     def backtrack(self):
         if self.GAME_SOLVED:
             return True
         if self.array_comparator():
             return True
-        self.iterations+=1
+        self.iterations += 1
         for i in range(0, len(self.ships_to_place)):
             size = self.ships_to_place[i]
-            self.size += asizeof.asizeof(size)
             # for z in range(0, 2):
             for z in Orientation:
                 # print("draw_ships_backtrack  " + str(i))
                 possib_positions = self.find_possib_positions(size, z)
-                self.size+=asizeof.asizeof(possib_positions)
                 for j in range(0, len(possib_positions)):
 
                     row = possib_positions[j][0]
                     col = possib_positions[j][1]
                     placed = self.place_ship(row, col, size, z)
-                    self.size += asizeof.asizeof(row)
-                    self.size += asizeof.asizeof(col)
-                    self.size += asizeof.asizeof(placed)
 
                     if placed:
                         # print(self.generated_array)
@@ -163,7 +151,6 @@ class ForwardChecking:
                         self.ship_start_pos_orien.append(z)
                         self.ships_to_place.pop(i)
                         result = self.backtrack()
-                        self.size += asizeof.asizeof(result)
                         if result:
                             return True
                         else:
@@ -172,16 +159,10 @@ class ForwardChecking:
                             bad_ship_row = self.ship_start_row_posit.pop()
                             bad_ship_col = self.ship_start_col_posit.pop()
                             bad_ship_cord = self.ship_start_pos_orien.pop()
-
-                            self.size += asizeof.asizeof(bad_ship_row)
-                            self.size += asizeof.asizeof(bad_ship_col)
-                            self.size += asizeof.asizeof(bad_ship_cord)
-
                             self.remove_ship(bad_ship_row, bad_ship_col, size, bad_ship_cord)
                             self.update_row_col_counters(1, bad_ship_row, bad_ship_col, size, bad_ship_cord)
         return False
         # chcek if generated array is the same as array with keys
-
 
     def remove_ship(self, row, col, size, orientation):
         # set cells with ship to empty
@@ -191,7 +172,6 @@ class ForwardChecking:
         else:
             for i in range(row, row + size):
                 self.generated_array[i][col] = self.empty_mark
-
 
     def update_row_col_counters(self, add_or_remove, row, col, size, orientation):
         # 0 = add, else = remove
@@ -222,7 +202,6 @@ class ForwardChecking:
         print(self.horizontal_ship_counter)
         print(self.vertical_ship_total)
 
-
     def place_ship(self, row, col, size, orientation):
         # check that placement is within bounds of grid
         # and that ship won't overlap existing nodes
@@ -251,7 +230,6 @@ class ForwardChecking:
         # print("true")
         return True
 
-
     def get_cell_value(self, row, col):
         # check if ship_mark is empty or not
         # avoid "out of bounds" error
@@ -262,7 +240,6 @@ class ForwardChecking:
         except IndexError:
             value = self.empty_mark
         return value
-
 
     def adjacent_ships(self, row, col, size, orientation):
         # returns True if there are adjacent ships,
@@ -291,42 +268,38 @@ class ForwardChecking:
             sys.stderr.write("OOOps, problems adjacent_ships()...")
         return False
 
-
     def find_possib_positions(self, size, orientation):
         possible_movements = []
         for row in range(0, self.NUMBER_OF_CELLS):
             for col in range(0, self.NUMBER_OF_CELLS):
-                adjacent = self.adjacent_ships(row, col, size, orientation)
+                # adjacent = self.adjacent_ships(row, col, size, orientation)
                 valid = True
-                self.size += asizeof.asizeof(valid)
-                self.size += asizeof.asizeof(adjacent)
-                if self.horizontal_ship_total[row] == 0:
-                    valid = False
-                elif self.horizontal_ship_total[col] == 0:
-                    valid = False
-                elif adjacent:
-                    valid = False
-                else:
-                    try:
-                        if orientation == Orientation.HORIZONTAL:
-                            for i in range(col, col + size):
-                                if self.horizontal_ship_counter[i] + 1 > self.horizontal_ship_total[i]:
-                                    valid = False
-                            if self.vertical_ship_counter[row] + size > self.vertical_ship_total[row]:
-                                valid = False
-                        elif orientation == Orientation.VERTICAL:
-                            for i in range(row, row + size):
-                                if self.vertical_ship_counter[i] + 1 > self.vertical_ship_total[i]:
-                                    valid = False
-                            if self.horizontal_ship_counter[col] + size > self.horizontal_ship_total[col]:
-                                valid = False
-                        else:
-                            sys.stderr.write("OOOps, problems find_possib_positions()...")
-
-                    except IndexError:
-                        valid = False
+                # if self.horizontal_ship_total[row] == 0:
+                #     valid = False
+                # elif self.horizontal_ship_total[col] == 0:
+                #     valid = False
+                # elif adjacent:
+                #     valid = False
+                # else:
+                # try:
+                #     if orientation == Orientation.HORIZONTAL:
+                #         for i in range(col, col + size):
+                #             if self.horizontal_ship_counter[i] + 1 > self.horizontal_ship_total[i]:
+                #                 valid = False
+                #         if self.vertical_ship_counter[row] + size > self.vertical_ship_total[row]:
+                #             valid = False
+                #     elif orientation == Orientation.VERTICAL:
+                #         for i in range(row, row + size):
+                #             if self.vertical_ship_counter[i] + 1 > self.vertical_ship_total[i]:
+                #                 valid = False
+                #         if self.horizontal_ship_counter[col] + size > self.horizontal_ship_total[col]:
+                #             valid = False
+                #     else:
+                #         sys.stderr.write("OOOps, problems find_possib_positions()...")
+                #
+                # except IndexError:
+                #     valid = False
                 if valid:
-                    # print("sdsdsdsd")
                     possible_movements.append([row, col])
         return possible_movements
 
@@ -342,13 +315,13 @@ class ForwardChecking:
 # gui.fill_vertical_or_horizontal_ship_counter(vertical=False)
 # gui.fill_vertical_or_horizontal_ship_counter(vertical=True)
 #
-# forward_checking_mrv= ForwardChecking(NUMBER_OF_CELLS,all_maps_data[MAP_NUMBER],gui)
+# backtracking_solver= Backtracking(NUMBER_OF_CELLS,all_maps_data[MAP_NUMBER],gui)
 
 
 # def main():
 #
 #     print("mrv_backtracking")
-#     forward_checking_mrv.convert_to_binary_map(all_maps_data[MAP_NUMBER])
-#     forward_checking_mrv.backtrack()
+#     backtracking_solver.convert_to_binary_map(all_maps_data[MAP_NUMBER])
+#     backtracking_solver.backtrack()
 #
 # main()

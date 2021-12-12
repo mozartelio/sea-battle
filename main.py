@@ -117,13 +117,15 @@ dfs_store=Dfs(NUMBER_OF_CELLS, checking_array, gui)
 forward_checking_mrv= ForwardChecking(NUMBER_OF_CELLS, all_maps_data[MAP_NUMBER], gui, MRV=True)
 forward_checking_lcv= ForwardChecking(NUMBER_OF_CELLS, all_maps_data[MAP_NUMBER], gui, LCV=True)
 
-# backtracking_mrv= Backtracking(NUMBER_OF_CELLS, all_maps_data[MAP_NUMBER], gui, MRV=True)
-# backtracking_lcv= Backtracking(NUMBER_OF_CELLS, all_maps_data[MAP_NUMBER], gui, LCV=True)
+backtracking_mrv= Backtracking(NUMBER_OF_CELLS, all_maps_data[MAP_NUMBER], gui, MRV=True)
+backtracking_lcv= Backtracking(NUMBER_OF_CELLS, all_maps_data[MAP_NUMBER], gui, LCV=True)
 
 def refresh_reset():
     dfs_store.reset()
     forward_checking_lcv.reset()
     forward_checking_mrv.reset()
+    backtracking_mrv.reset()
+    backtracking_lcv.reset()
     drawer()
 
 def dfs():
@@ -139,19 +141,35 @@ def dfs():
     # gui.draw_ships_algorithm(np.array(checking_array).flatten())
 
 
-def mrv_backtracking():
-    # refresh_reset()
-    print("mrv_backtracking")
-#     TODO: mrv_backtracking
-
 def lcv_backtracking():
-    # refresh_reset()
+    refresh_reset()
     print("lcv_backtracking")
-#   TODO: lcv_backtracking
+
+    name_of_alg = "backtracking + LCV"
+    time_before = time.time()
+    backtracking_lcv.convert_to_binary_map()
+    backtracking_lcv.backtrack()
+    time_after = time.time()
+    print("Time difference (s): " + str(time_after - time_before))
+    stats = Statistics(gui.screen)
+    stats.print_stats(time_after - time_before, sys.getsizeof(backtracking_lcv), backtracking_lcv.iterations, name_of_alg)
+
+
+def mrv_backtracking():
+    refresh_reset()
+    print("mrv_backtracking")
+    name_of_alg = "backtracking + MRV"
+    time_before = time.time()
+    backtracking_mrv.convert_to_binary_map()
+    backtracking_mrv.backtrack()
+    time_after = time.time()
+    print("Time difference (s): " + str(time_after - time_before))
+    stats = Statistics(gui.screen)
+    stats.print_stats(time_after - time_before, sys.getsizeof(backtracking_mrv), backtracking_mrv.iterations, name_of_alg)
+
 
 def mrv_forward_checking():
     refresh_reset()
-
     print("mrv_forward_checking")
     name_of_alg = "forward_checking + MRV"
     time_before = time.time()
@@ -160,7 +178,7 @@ def mrv_forward_checking():
     time_after = time.time()
     print("Time difference (s): " + str(time_after - time_before))
     stats = Statistics(gui.screen)
-    stats.print_stats(time_after - time_before, 100500, forward_checking_mrv.iterations, name_of_alg)
+    stats.print_stats(time_after - time_before, sys.getsizeof(forward_checking_mrv)+forward_checking_mrv.size, forward_checking_mrv.iterations, name_of_alg)
 
 
 def lcv_forward_checking():
@@ -174,7 +192,7 @@ def lcv_forward_checking():
     time_after = time.time()
     print("Time difference (s): " + str(time_after - time_before))
     stats = Statistics(gui.screen)
-    stats.print_stats(time_after - time_before, 100500, forward_checking_lcv.iterations, name_of_alg)
+    stats.print_stats(time_after - time_before, sys.getsizeof(forward_checking_lcv)+forward_checking_lcv.size, forward_checking_lcv.iterations, name_of_alg)
 
 buttonDFS = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'DFS', dfs)
 buttonMRV_backtracking = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'backtracking + MRV', mrv_backtracking)
