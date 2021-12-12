@@ -17,7 +17,7 @@ all_maps_data = json.load(our_first_map_file)
 all_maps_data_copy = all_maps_data.copy()
 
 # 16 was here
-MAP_NUMBER = str(18)
+MAP_NUMBER = str(6)
 
 NUMBER_OF_CELLS = all_maps_data[MAP_NUMBER]["NUMBER_OF_CELLS"]
 ships = all_maps_data[MAP_NUMBER]["ships"]
