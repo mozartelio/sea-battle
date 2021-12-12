@@ -3,6 +3,7 @@ from enum import Enum
 import numpy as np
 
 from gui import *
+from pympler import asizeof
 
 
 class Orientation(Enum):
@@ -56,9 +57,23 @@ class Backtracking:
         self.ship_start_row_posit = []
         self.ship_start_col_posit = []
         self.ship_start_pos_orien = []
+        self.size=0
 
 
     def convert_to_binary_map(self):
+        self.size = asizeof.asizeof(self.empty_mark) + asizeof.asizeof(self.ship_mark) + asizeof.asizeof(
+            self.all_map_data) + \
+                    +asizeof.asizeof(self.mrv) + asizeof.asizeof(self.lcv) + asizeof.asizeof(
+            self.NUMBER_OF_CELLS) + asizeof.asizeof(self.two_dimensional_answer_field) + \
+                    +asizeof.asizeof(self.converted_two_dimensional_answer_field) + asizeof.asizeof(
+            self.GAME_SOLVED) + asizeof.asizeof(self.iterations) + \
+                    +asizeof.asizeof(self.generated_array) + asizeof.asizeof(
+            self.vertical_ship_total) + asizeof.asizeof(self.horizontal_ship_total) + \
+                    +asizeof.asizeof(self.vertical_ship_counter) + asizeof.asizeof(
+            self.horizontal_ship_counter) + asizeof.asizeof(self.ships_to_place) + \
+                    +asizeof.asizeof(self.ship_start_row_posit) + asizeof.asizeof(
+            self.ship_start_col_posit) + asizeof.asizeof(self.ship_start_pos_orien) + \
+                    +asizeof.asizeof(self.size)
         if self.mrv:
             print("mrv")
         if self.lcv:
@@ -81,6 +96,7 @@ class Backtracking:
             print()
         print("converted successfully")
         self.converted_two_dimensional_answer_field = field
+        self.size += asizeof.asizeof(field)
 
 
     def array_comparator(self):
@@ -133,15 +149,20 @@ class Backtracking:
         self.iterations += 1
         for i in range(0, len(self.ships_to_place)):
             size = self.ships_to_place[i]
+            self.size += asizeof.asizeof(size)
             # for z in range(0, 2):
             for z in Orientation:
                 # print("draw_ships_backtrack  " + str(i))
                 possib_positions = self.find_possib_positions(size, z)
+                self.size += asizeof.asizeof(possib_positions)
                 for j in range(0, len(possib_positions)):
 
                     row = possib_positions[j][0]
                     col = possib_positions[j][1]
                     placed = self.place_ship(row, col, size, z)
+                    self.size += asizeof.asizeof(row)
+                    self.size += asizeof.asizeof(col)
+                    self.size += asizeof.asizeof(placed)
 
                     if placed:
                         # print(self.generated_array)
@@ -151,6 +172,7 @@ class Backtracking:
                         self.ship_start_pos_orien.append(z)
                         self.ships_to_place.pop(i)
                         result = self.backtrack()
+                        self.size += asizeof.asizeof(result)
                         if result:
                             return True
                         else:
@@ -159,6 +181,11 @@ class Backtracking:
                             bad_ship_row = self.ship_start_row_posit.pop()
                             bad_ship_col = self.ship_start_col_posit.pop()
                             bad_ship_cord = self.ship_start_pos_orien.pop()
+
+                            self.size += asizeof.asizeof(bad_ship_row)
+                            self.size += asizeof.asizeof(bad_ship_col)
+                            self.size += asizeof.asizeof(bad_ship_cord)
+
                             self.remove_ship(bad_ship_row, bad_ship_col, size, bad_ship_cord)
                             self.update_row_col_counters(1, bad_ship_row, bad_ship_col, size, bad_ship_cord)
         return False
@@ -274,6 +301,7 @@ class Backtracking:
             for col in range(0, self.NUMBER_OF_CELLS):
                 # adjacent = self.adjacent_ships(row, col, size, orientation)
                 valid = True
+                self.size += asizeof.asizeof(valid)               #?
                 # if self.horizontal_ship_total[row] == 0:
                 #     valid = False
                 # elif self.horizontal_ship_total[col] == 0:

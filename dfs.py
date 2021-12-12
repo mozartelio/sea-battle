@@ -2,6 +2,7 @@
 from statistics import *
 import numpy as np
 import time
+from pympler import asizeof
 
 class Dfs:
     def __init__(self, number_of_cells, two_dimensional_answer_field,gui):
@@ -12,6 +13,7 @@ class Dfs:
         self.values = [True, False]
         self.iterations = 0
         self.dfs_array = []
+       # self.size=0
 
     def reset(self):
         self.GAME_SOLVED = False
@@ -39,6 +41,7 @@ class Dfs:
 
             for i in self.values:
                 self.dfs_array.append(i)
+               # self.size+=asizeof.asizeof(self.dfs_array.append(i))  #???
                 self.iterations += 1
                 print("Iterations: " + str(self.iterations))
                 #print(array)

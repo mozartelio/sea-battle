@@ -16,7 +16,7 @@ our_first_map_file = open('maps.json', )
 all_maps_data = json.load(our_first_map_file)
 all_maps_data_copy = all_maps_data.copy()
 
-MAP_NUMBER = str(11)
+MAP_NUMBER = str(16)
 
 NUMBER_OF_CELLS = all_maps_data[MAP_NUMBER]["NUMBER_OF_CELLS"]
 ships = all_maps_data[MAP_NUMBER]["ships"]
@@ -117,6 +117,9 @@ print(checking_array)
 gui=Gui(NUMBER_OF_CELLS,all_maps_data[MAP_NUMBER]["map"])
 
 dfs_store=Dfs(NUMBER_OF_CELLS, checking_array, gui)
+#dfs_store.size=0
+#dfs_store.size += asizeof.asizeof(checking_array)  #????
+
 forward_checking_mrv= ForwardChecking(NUMBER_OF_CELLS, all_maps_data[MAP_NUMBER], gui, MRV=True)
 forward_checking_lcv= ForwardChecking(NUMBER_OF_CELLS, all_maps_data[MAP_NUMBER], gui, LCV=True)
 
@@ -133,14 +136,14 @@ def refresh_reset():
 
 def dfs():
     refresh_reset()
-    name_of_alg = "Dfs"
+    name_of_alg = "DFS"
     time_before=time.time()
     print("DFS")
     dfs_store.dfs()
     time_after=time.time()
     print("Time difference (s): " + str(time_after-time_before))
     stats = Statistics(gui.screen)
-    stats.print_stats(time_after - time_before,asizeof.asizeof(dfs_store.dfs()),dfs_store.iterations,name_of_alg)
+    stats.print_stats(time_after - time_before,sys.getsizeof(dfs_store)+dfs_store.size,dfs_store.iterations,name_of_alg)
     # gui.draw_ships_algorithm(np.array(checking_array).flatten())
 
 
@@ -155,7 +158,7 @@ def lcv_backtracking():
     time_after = time.time()
     print("Time difference (s): " + str(time_after - time_before))
     stats = Statistics(gui.screen)
-    stats.print_stats(time_after - time_before, sys.getsizeof(backtracking_lcv), backtracking_lcv.iterations, name_of_alg)
+    stats.print_stats(time_after - time_before, sys.getsizeof(backtracking_lcv)+backtracking_lcv.size, backtracking_lcv.iterations, name_of_alg)
 
 
 def mrv_backtracking():
@@ -168,7 +171,7 @@ def mrv_backtracking():
     time_after = time.time()
     print("Time difference (s): " + str(time_after - time_before))
     stats = Statistics(gui.screen)
-    stats.print_stats(time_after - time_before, sys.getsizeof(backtracking_mrv), backtracking_mrv.iterations, name_of_alg)
+    stats.print_stats(time_after - time_before, sys.getsizeof(backtracking_mrv)+backtracking_mrv.size, backtracking_mrv.iterations, name_of_alg)
 
 
 def mrv_forward_checking():
