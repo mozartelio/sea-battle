@@ -13,12 +13,18 @@ class Dfs:
         self.values = [True, False]
         self.iterations = 0
         self.dfs_array = []
-       # self.size=0
+        self.size=0
+
+    def preset(self):
+        self.size = asizeof.asizeof(self.NUMBER_OF_CELLS) + asizeof.asizeof(self.one_dimensional_answer_field) + \
+                    asizeof.asizeof(self.GAME_SOLVED) + asizeof.asizeof(self.values) + asizeof.asizeof(self.iterations)
 
     def reset(self):
         self.GAME_SOLVED = False
         self.iterations = 0
         self.dfs_array = []
+        self.size=0
+
 
     def array_comparator(self, array_to_compare):
         if len(array_to_compare) == len(self.one_dimensional_answer_field):
@@ -41,7 +47,7 @@ class Dfs:
 
             for i in self.values:
                 self.dfs_array.append(i)
-               # self.size+=asizeof.asizeof(self.dfs_array.append(i))  #???
+                self.size += asizeof.asizeof(i)
                 self.iterations += 1
                 print("Iterations: " + str(self.iterations))
                 #print(array)

@@ -96,7 +96,6 @@ class ForwardChecking:
             for y in range(0, self.NUMBER_OF_CELLS):
                 if self.generated_array[x][y]==1:
                     print("1" + " ", end='')
-                    #print(str(dfska_field[xq][yq]) + " ", end='')
                 else:
                     print("0" + " ", end='')
             print()
@@ -123,7 +122,6 @@ class ForwardChecking:
                 print("GAME auauuauauauauaua!!!")
         self.gui.draw_ships_algorithm(self.generated_array,dimension=2)
 
-        # if self.respects_indicators():
         # if np.array_equal(np.array(self.generated_array),np.array(self.converted_two_dimensional_answer_field)):
         if self.generated_array==self.converted_two_dimensional_answer_field:
             self.GAME_SOLVED = True
@@ -141,9 +139,7 @@ class ForwardChecking:
         for i in range(0, len(self.ships_to_place)):
             size = self.ships_to_place[i]
             self.size += asizeof.asizeof(size)
-            # for z in range(0, 2):
             for z in Orientation:
-                # print("draw_ships_backtrack  " + str(i))
                 possib_positions = self.find_possib_positions(size, z)
                 self.size+=asizeof.asizeof(possib_positions)
                 for j in range(0, len(possib_positions)):
@@ -156,7 +152,6 @@ class ForwardChecking:
                     self.size += asizeof.asizeof(placed)
 
                     if placed:
-                        # print(self.generated_array)
                         self.update_row_col_counters(0, row, col, size, z)
                         self.ship_start_row_posit.append(row)
                         self.ship_start_col_posit.append(col)
@@ -168,7 +163,6 @@ class ForwardChecking:
                             return True
                         else:
                             self.ships_to_place.insert(i, size)
-                            # self.ships_to_place.sort(reverse=True)
                             bad_ship_row = self.ship_start_row_posit.pop()
                             bad_ship_col = self.ship_start_col_posit.pop()
                             bad_ship_cord = self.ship_start_pos_orien.pop()
@@ -180,7 +174,6 @@ class ForwardChecking:
                             self.remove_ship(bad_ship_row, bad_ship_col, size, bad_ship_cord)
                             self.update_row_col_counters(1, bad_ship_row, bad_ship_col, size, bad_ship_cord)
         return False
-        # chcek if generated array is the same as array with keys
 
 
     def remove_ship(self, row, col, size, orientation):
@@ -233,7 +226,6 @@ class ForwardChecking:
                     if self.generated_array[row][j] != self.empty_mark:
                         return False
                 for j in range(col, col + size):
-                    # print("horizontal false")
                     self.generated_array[row][j] = self.ship_mark
 
             elif orientation == Orientation.VERTICAL:
@@ -241,14 +233,11 @@ class ForwardChecking:
                     if self.generated_array[i][col] != self.empty_mark:
                         return False
                 for i in range(row, row + size):
-                    # print("horizontal false")
                     self.generated_array[i][col] = self.ship_mark
             else:
                 sys.stderr.write("OOOps, problems place_ship()...")
         except IndexError:
-            # print("false")
             return False
-        # print("true")
         return True
 
 
@@ -326,29 +315,6 @@ class ForwardChecking:
                     except IndexError:
                         valid = False
                 if valid:
-                    # print("sdsdsdsd")
                     possible_movements.append([row, col])
         return possible_movements
 
-
-
-# MAP_NUMBER = str(1)
-# NUMBER_OF_CELLS = 10
-#
-# our_first_map_file = open('maps.json', )
-# all_maps_data = json.load(our_first_map_file)
-#
-# gui=Gui(NUMBER_OF_CELLS,all_maps_data[MAP_NUMBER])
-# gui.fill_vertical_or_horizontal_ship_counter(vertical=False)
-# gui.fill_vertical_or_horizontal_ship_counter(vertical=True)
-#
-# forward_checking_mrv= ForwardChecking(NUMBER_OF_CELLS,all_maps_data[MAP_NUMBER],gui)
-
-
-# def main():
-#
-#     print("mrv_backtracking")
-#     forward_checking_mrv.convert_to_binary_map(all_maps_data[MAP_NUMBER])
-#     forward_checking_mrv.backtrack()
-#
-# main()

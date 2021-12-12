@@ -148,15 +148,15 @@ class Gui:
 
         # print("row_block_center: " + str(row_block_center))
         # print("column_block_center: " + str(column_block_center))
-        # for x in range(0, self.NUMBER_OF_CELLS):
-        #     for y in range(0, self.NUMBER_OF_CELLS):
-        #         if (array_to_compare[x * self.NUMBER_OF_CELLS + y] if dimension == 1
-        #                     else  (array_to_compare[x][ y] if dimension == 2 else None)):
-        #             print("1" + " ", end='')
-        #             #print(str(dfska_field[xq][yq]) + " ", end='')
-        #         else:
-        #             print("0" + " ", end='')
-        #     print()
+        for x in range(0, self.NUMBER_OF_CELLS):
+            for y in range(0, self.NUMBER_OF_CELLS):
+                if (array_to_compare[x * self.NUMBER_OF_CELLS + y] if dimension == 1
+                            else  (array_to_compare[x][ y] if dimension == 2 else None)):
+                    print("1" + " ", end='')
+                    #print(str(dfska_field[xq][yq]) + " ", end='')
+                else:
+                    print("0" + " ", end='')
+            print()
 
         # pygame.draw.circle(self.screen, self.BLACK, (column_block_center,row_block_center), circle_radius * 20)
         # pygame.display.update()
@@ -167,11 +167,13 @@ class Gui:
                     else  (array_to_compare[x][ y] if dimension == 2 else None)):
                     pygame.draw.rect(self.screen, self.WHITE,(column_block_center - circle_radius, row_block_center - circle_radius, 17, 17))
                     pygame.draw.circle(self.screen, self.BLACK, (column_block_center,row_block_center), circle_radius)
+                    pygame.display.update()
 
                 elif not (array_to_compare[x * self.NUMBER_OF_CELLS + y] if dimension == 1
                     else  (array_to_compare[x][ y] if dimension == 2 else None)):
                     pygame.draw.rect(self.screen, self.WHITE, (column_block_center - circle_radius, row_block_center - circle_radius, 17,17))
                     self.screen.blit(self.img_cross,(column_block_center - circle_radius, row_block_center - circle_radius))
+                    pygame.display.update()
                 else:
                     sys.stderr.write("OOOps, problems draw_ships_backtrack()...")
 
