@@ -17,7 +17,10 @@ all_maps_data = json.load(our_first_map_file)
 all_maps_data_copy = all_maps_data.copy()
 
 MAP_NUMBER = str(11)
+
 NUMBER_OF_CELLS = all_maps_data[MAP_NUMBER]["NUMBER_OF_CELLS"]
+ships = all_maps_data[MAP_NUMBER]["ships"]
+
 
 
 class Game_state(Enum):
@@ -203,7 +206,7 @@ buttonLCV_forward_checking = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'forwar
 
 def drawer():
     gui.screen.fill(gui.WHITE)
-    gui.flotila_plavidel(gui.screen, gui.img_horizontal_left_edge, gui.img_horizontal_right_edge)
+    gui.flotila_plavidel(gui.screen, gui.img_horizontal_left_edge, gui.img_horizontal_right_edge,ships)
     gui.draw_grid()
     gui.draw_ships()
     # TODO: buttons rendering in this function (not easy task)
@@ -217,7 +220,7 @@ def main():
     gui.screen.fill(gui.WHITE)
     # gui.fill_vertical_or_horizontal_ship_counter(vertical=False)
     # gui.fill_vertical_or_horizontal_ship_counter(vertical=True)
-    gui.flotila_plavidel(gui.screen, gui.img_horizontal_left_edge, gui.img_horizontal_right_edge)
+    gui.flotila_plavidel(gui.screen, gui.img_horizontal_left_edge, gui.img_horizontal_right_edge, ships)
     gui.draw_grid()
 
     print(str(dfs_store.one_dimensional_answer_field))

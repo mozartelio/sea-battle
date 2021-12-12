@@ -47,29 +47,31 @@ class Gui:
         self.fill_vertical_or_horizontal_ship_counter(vertical=True)
 
 
-    def flotila_plavidel(self, screen, img_horizontal_left_edge, img_horizontal_right_edge):
+    def flotila_plavidel(self, screen, img_horizontal_left_edge, img_horizontal_right_edge,ships):
         font = pygame.font.SysFont('arial', self.font_size)
         text = font.render('Flotila plavidel:', True, self.BLACK)
         textRect = text.get_rect()
         textRect.center = (7 * self.LEFT_INDENT, self.UPPER_INDENT)
         screen.blit(text, textRect)
-        for i in range(1, self.NUMBER_OF_CELLS):
-            if i < 7:
-                screen.blit(img_horizontal_left_edge, (6.65 * self.LEFT_INDENT, self.UPPER_INDENT + i * self.BLOCK_SIZE - 5))
-                if i < 4:
-                    pygame.draw.rect(screen, self.BLACK,
-                                     (int(6.75 * self.LEFT_INDENT + 9), int(self.UPPER_INDENT + i * self.BLOCK_SIZE - 4), 15, 15))
-                    if i < 2:
-                        pygame.draw.rect(screen, self.BLACK,
-                                         (int(6.75 * self.LEFT_INDENT + 27), int(self.UPPER_INDENT + i * self.BLOCK_SIZE - 4), 15, 15))
-                        screen.blit(img_horizontal_right_edge, (6.65 * self.LEFT_INDENT + 54, self.UPPER_INDENT + i * self.BLOCK_SIZE - 5))
-                    if i > 1:
-                        screen.blit(img_horizontal_right_edge,
-                                    (6.65 * self.LEFT_INDENT + 36.5, self.UPPER_INDENT + i * self.BLOCK_SIZE - 5))
-                if i > 3 and i < 7:
-                    screen.blit(img_horizontal_right_edge, (6.65 * self.LEFT_INDENT + 18.5, self.UPPER_INDENT + i * self.BLOCK_SIZE - 5))
-            if i > 5:
-                pygame.draw.circle(screen, self.BLACK, (6.75 * self.LEFT_INDENT, self.UPPER_INDENT + (i + 1) * self.BLOCK_SIZE + 2), 8)
+        for i in range(0, len(ships)):
+            match ships[i]:
+                case 4:
+                    screen.blit(img_horizontal_left_edge,(6.65 * self.LEFT_INDENT, self.UPPER_INDENT + (i+1) * self.BLOCK_SIZE -5))
+                    pygame.draw.rect(screen, self.BLACK,(int(6.75 * self.LEFT_INDENT + 10),(self.UPPER_INDENT + (i+1) * self.BLOCK_SIZE - 4), 15, 15))
+                    pygame.draw.rect(screen, self.BLACK,(int(6.75 * self.LEFT_INDENT + 29),int(self.UPPER_INDENT + (i+1) * self.BLOCK_SIZE - 4), 15, 15))
+                    screen.blit(img_horizontal_right_edge,(6.65 * self.LEFT_INDENT + 57, self.UPPER_INDENT + (i+1) * self.BLOCK_SIZE - 5))
+                case 3:
+                    screen.blit(img_horizontal_left_edge,(6.65 * self.LEFT_INDENT, self.UPPER_INDENT + (i + 1) * self.BLOCK_SIZE - 5))
+                    pygame.draw.rect(screen, self.BLACK, (int(6.75 * self.LEFT_INDENT + 10), (self.UPPER_INDENT + (i + 1) * self.BLOCK_SIZE - 4), 15, 15))
+                    screen.blit(img_horizontal_right_edge,(6.65 * self.LEFT_INDENT + 38, self.UPPER_INDENT + (i + 1) * self.BLOCK_SIZE - 5))
+                case 2:
+                    screen.blit(img_horizontal_left_edge,(6.65 * self.LEFT_INDENT, self.UPPER_INDENT + (i + 1) * self.BLOCK_SIZE - 5))
+                    screen.blit(img_horizontal_right_edge,(6.65 * self.LEFT_INDENT + 19, self.UPPER_INDENT + (i + 1) * self.BLOCK_SIZE - 5))
+                case 1:
+                    pygame.draw.circle(screen, self.BLACK,(6.75 * self.LEFT_INDENT, self.UPPER_INDENT + (i + 1) * self.BLOCK_SIZE + 2), 8)
+                    pygame.draw.circle(screen, self.BLACK,(6.75 * self.LEFT_INDENT, self.UPPER_INDENT + (i + 1) * self.BLOCK_SIZE + 2), 8)
+                    pygame.draw.circle(screen, self.BLACK,(6.75 * self.LEFT_INDENT, self.UPPER_INDENT + (i + 1) * self.BLOCK_SIZE + 2), 8)
+                    pygame.draw.circle(screen, self.BLACK,(6.75 * self.LEFT_INDENT, self.UPPER_INDENT + (i + 1) * self.BLOCK_SIZE + 2), 8)
 
 
     def fill_vertical_or_horizontal_ship_counter(self, vertical):
@@ -193,15 +195,11 @@ class Gui:
             # print('***')
 
             # vertical grid1
-            pygame.draw.line(self.screen, self.BLACK, (self.LEFT_INDENT + i * self.BLOCK_SIZE, self.UPPER_INDENT),
-                             (self.LEFT_INDENT + i * self.BLOCK_SIZE, self.UPPER_INDENT + self.NUMBER_OF_CELLS * self.BLOCK_SIZE), 1)
+            pygame.draw.line(self.screen, self.BLACK, (self.LEFT_INDENT + i * self.BLOCK_SIZE, self.UPPER_INDENT), (self.LEFT_INDENT + i * self.BLOCK_SIZE, self.UPPER_INDENT + self.NUMBER_OF_CELLS * self.BLOCK_SIZE), 1)
             # horizontal grid2
-            pygame.draw.line(self.screen, self.BLACK, (self.LEFT_INDENT + 15 * self.BLOCK_SIZE, self.UPPER_INDENT +
-                                             i * self.BLOCK_SIZE),
-                             (self.LEFT_INDENT + 15* self.BLOCK_SIZE+ self.NUMBER_OF_CELLS * self.BLOCK_SIZE, self.UPPER_INDENT + i * self.BLOCK_SIZE), 1)
+            pygame.draw.line(self.screen, self.BLACK, (self.LEFT_INDENT + 15 * self.BLOCK_SIZE, self.UPPER_INDENT + i * self.BLOCK_SIZE), (self.LEFT_INDENT + 15* self.BLOCK_SIZE+ self.NUMBER_OF_CELLS * self.BLOCK_SIZE, self.UPPER_INDENT + i * self.BLOCK_SIZE), 1)
             # vertical grid2
-            pygame.draw.line(self.screen, self.BLACK, (self.LEFT_INDENT + (i + 15) * self.BLOCK_SIZE, self.UPPER_INDENT),
-                             (self.LEFT_INDENT + (i + 15) * self.BLOCK_SIZE, self.UPPER_INDENT + self.NUMBER_OF_CELLS * self.BLOCK_SIZE), 1)
+            pygame.draw.line(self.screen, self.BLACK, (self.LEFT_INDENT + (i + 15) * self.BLOCK_SIZE, self.UPPER_INDENT), (self.LEFT_INDENT + (i + 15) * self.BLOCK_SIZE, self.UPPER_INDENT + self.NUMBER_OF_CELLS * self.BLOCK_SIZE), 1)
 
             if i < self.NUMBER_OF_CELLS:
                 num_vertical = self.font_x.render(str(self.vertical_ship_counter[i]), True, self.BLACK)
@@ -215,18 +213,13 @@ class Gui:
                 # letters_hor_width = letters_hor.get_width()
 
                 # vertical num_vertical grid1
-                self.screen.blit(num_vertical, (3.2 * self.LEFT_INDENT - (self.BLOCK_SIZE // 2 + num_width // 2),
-                                           self.UPPER_INDENT + i * self.BLOCK_SIZE + (self.BLOCK_SIZE // 2 - num_height // 2)))
+                self.screen.blit(num_vertical, (self.LEFT_INDENT - (self.BLOCK_SIZE // 2 + num_width // 2),self.UPPER_INDENT + i * self.BLOCK_SIZE + (self.BLOCK_SIZE // 2 - num_height // 2)))
                 # horizontal letters grid1
-                self.screen.blit(num_horizontal, (
-                    self.LEFT_INDENT + i * self.BLOCK_SIZE + (self.BLOCK_SIZE // 2 - num_width // 2), self.UPPER_INDENT + 10 * self.BLOCK_SIZE))
+                self.screen.blit(num_horizontal, (self.LEFT_INDENT + i * self.BLOCK_SIZE + (self.BLOCK_SIZE // 2 - num_width // 2), self.UPPER_INDENT + self.NUMBER_OF_CELLS * self.BLOCK_SIZE))
                 # vertical num_vertical grid2
-                self.screen.blit(num_vertical, (3.2 * self.LEFT_INDENT - (self.BLOCK_SIZE // 2 + num_width // 2) + 15 *
-                                           self.BLOCK_SIZE, self.UPPER_INDENT + i * self.BLOCK_SIZE + (self.BLOCK_SIZE // 2 - num_height // 2)))
+                self.screen.blit(num_vertical, (self.LEFT_INDENT - (self.BLOCK_SIZE // 2 + num_width // 2) + 15* self.BLOCK_SIZE, self.UPPER_INDENT + i * self.BLOCK_SIZE + (self.BLOCK_SIZE // 2 - num_height // 2)))
                 # horizontal letters grid2
-                self.screen.blit(num_horizontal, (
-                    self.LEFT_INDENT + i * self.BLOCK_SIZE + (self.BLOCK_SIZE // 2 - num_width // 2) + 15 * self.BLOCK_SIZE,
-                    self.UPPER_INDENT + 10 * self.BLOCK_SIZE))
+                self.screen.blit(num_horizontal, ( self.LEFT_INDENT + i * self.BLOCK_SIZE + (self.BLOCK_SIZE // 2 - num_width // 2) + 15* self.BLOCK_SIZE,self.UPPER_INDENT + self.NUMBER_OF_CELLS * self.BLOCK_SIZE))
 
 
 
