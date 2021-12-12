@@ -3,7 +3,7 @@ from statistics import *
 import numpy as np
 import time
 
-class DFS:
+class Dfs:
     def __init__(self, number_of_cells, two_dimensional_answer_field,gui):
         self.gui = gui
         self.NUMBER_OF_CELLS = number_of_cells
@@ -13,10 +13,15 @@ class DFS:
         self.iterations = 0
         self.dfs_array = []
 
+    def reset(self):
+        self.GAME_SOLVED = False
+        self.iterations = 0
+        self.dfs_array = []
+
     def array_comparator(self, array_to_compare):
         if len(array_to_compare) == len(self.one_dimensional_answer_field):
             # time.sleep(0.5)
-            self.gui.draw_ships_algorithm(array_to_compare)
+            self.gui.draw_ships_algorithm(array_to_compare, dimension=1)
 
             test = np.array(array_to_compare)
             comparison = test == self.one_dimensional_answer_field
