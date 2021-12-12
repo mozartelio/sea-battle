@@ -20,10 +20,10 @@ class Gui:
         self.UPPER_INDENT = 10
         self.size = (self.LEFT_INDENT + 43 * self.BLOCK_SIZE, self.UPPER_INDENT + 22 * self.BLOCK_SIZE)
         pygame.init()
-        self.screen = pygame.display.set_mode(self.size)
+        self.screen = pygame.display.set_mode(self.size) #None #
         pygame.display.set_caption("Lode")
         self.font_size = int(self.BLOCK_SIZE / 1.5)
-        self.font_x = pygame.font.SysFont('arial', self.font_size)
+        self.font_x = pygame.font.SysFont('arial', self.font_size) #None#
 
         self.WHITE = (255, 255, 255)
         self.BLACK = (0, 0, 0)
@@ -42,6 +42,9 @@ class Gui:
 
         self.vertical_ship_counter = [0] * self.NUMBER_OF_CELLS
         self.horizontal_ship_counter = [0] * self.NUMBER_OF_CELLS
+
+        self.fill_vertical_or_horizontal_ship_counter(vertical=False)
+        self.fill_vertical_or_horizontal_ship_counter(vertical=True)
 
 
     def flotila_plavidel(self, screen, img_horizontal_left_edge, img_horizontal_right_edge):
@@ -127,50 +130,55 @@ class Gui:
                                          'not declared new cell state with number:' +
                                          str(self.all_maps_data[y][x]) + '\n')
                 y_block_center = y_block_center + self.BLOCK_SIZE
-                print("x_block_center CHECKER: " + str(x_block_center))
-                print("y_block_center CHECKER: " + str(y_block_center))
+                # print("x_block_center CHECKER: " + str(x_block_center))
+                # print("y_block_center CHECKER: " + str(y_block_center))
             y_block_center = self.UPPER_INDENT + self.BLOCK_SIZE / 2
             x_block_center = x_block_center + self.BLOCK_SIZE
 
         pygame.display.update()
 
     '''to draw ships' field which с'''
-    def draw_ships_algorithm(self,array_to_compare):
+    def draw_ships_algorithm(self, array_to_compare, dimension):
         row_block_center = self.UPPER_INDENT + self.BLOCK_SIZE / 2
         column_block_center = self.UPPER_INDENT + self.BLOCK_SIZE*20
 
         circle_radius = 8
 
-        print("row_block_center: " + str(row_block_center))
-        print("column_block_center: " + str(column_block_center))
-        for x in range(0, self.NUMBER_OF_CELLS):
-            for y in range(0, self.NUMBER_OF_CELLS):
-                if array_to_compare[x*self.NUMBER_OF_CELLS+y]:
-                    print("1" + " ", end='')
-                    #print(str(dfska_field[xq][yq]) + " ", end='')
-                else:
-                    print("0" + " ", end='')
-            print()
+        # print("row_block_center: " + str(row_block_center))
+        # print("column_block_center: " + str(column_block_center))
+        # for x in range(0, self.NUMBER_OF_CELLS):
+        #     for y in range(0, self.NUMBER_OF_CELLS):
+        #         if (array_to_compare[x * self.NUMBER_OF_CELLS + y] if dimension == 1
+        #                     else  (array_to_compare[x][ y] if dimension == 2 else None)):
+        #             print("1" + " ", end='')
+        #             #print(str(dfska_field[xq][yq]) + " ", end='')
+        #         else:
+        #             print("0" + " ", end='')
+        #     print()
 
         # pygame.draw.circle(self.screen, self.BLACK, (column_block_center,row_block_center), circle_radius * 20)
         # pygame.display.update()
         for x in range(0, self.NUMBER_OF_CELLS):
             for y in range(0, self.NUMBER_OF_CELLS):
-                if array_to_compare[x*self.NUMBER_OF_CELLS+y]:
-                    # pygame.draw.circle(self.screen, self.BLACK, (row_block_center, column_block_center), circle_radius * 10)
-                    pygame.display.update()
+
+                if (array_to_compare[x * self.NUMBER_OF_CELLS + y] if dimension == 1
+                    else  (array_to_compare[x][ y] if dimension == 2 else None)):
                     pygame.draw.rect(self.screen, self.WHITE,(column_block_center - circle_radius, row_block_center - circle_radius, 17, 17))
                     pygame.draw.circle(self.screen, self.BLACK, (column_block_center,row_block_center), circle_radius)
-                else:
+
+                elif not (array_to_compare[x * self.NUMBER_OF_CELLS + y] if dimension == 1
+                    else  (array_to_compare[x][ y] if dimension == 2 else None)):
                     pygame.draw.rect(self.screen, self.WHITE, (column_block_center - circle_radius, row_block_center - circle_radius, 17,17))
                     self.screen.blit(self.img_cross,(column_block_center - circle_radius, row_block_center - circle_radius))
+                else:
+                    sys.stderr.write("OOOps, problems draw_ships_backtrack()...")
 
                 column_block_center = column_block_center +self.BLOCK_SIZE
 
             column_block_center = self.UPPER_INDENT + self.BLOCK_SIZE*20
             row_block_center = row_block_center + self.BLOCK_SIZE
-            print("row_block_center in cycle: " + str(row_block_center))
-            print("column_block_center in cycle: " + str(column_block_center))
+            # print("row_block_center in cycle: " + str(row_block_center))
+            # print("column_block_center in cycle: " + str(column_block_center))
         pygame.display.update()
 
 
@@ -190,7 +198,7 @@ class Gui:
             # horizontal grid2
             pygame.draw.line(self.screen, self.BLACK, (self.LEFT_INDENT + 15 * self.BLOCK_SIZE, self.UPPER_INDENT +
                                              i * self.BLOCK_SIZE),
-                             (self.LEFT_INDENT + 25 * self.BLOCK_SIZE, self.UPPER_INDENT + i * self.BLOCK_SIZE), 1)
+                             (self.LEFT_INDENT + 15* self.BLOCK_SIZE+ self.NUMBER_OF_CELLS * self.BLOCK_SIZE, self.UPPER_INDENT + i * self.BLOCK_SIZE), 1)
             # vertical grid2
             pygame.draw.line(self.screen, self.BLACK, (self.LEFT_INDENT + (i + 15) * self.BLOCK_SIZE, self.UPPER_INDENT),
                              (self.LEFT_INDENT + (i + 15) * self.BLOCK_SIZE, self.UPPER_INDENT + self.NUMBER_OF_CELLS * self.BLOCK_SIZE), 1)

@@ -1,5 +1,5 @@
-from pympler import asizeof
 
+from pympler import asizeof
 from dfs import *
 from statistics import *
 import pygame
@@ -7,16 +7,17 @@ import json
 from enum import Enum
 import sys
 import time
-
+from forward_checking import *
+from backtracking import *
 from gui import *
 
-MAP_NUMBER = str(3)
-NUMBER_OF_CELLS = 10
 
 our_first_map_file = open('maps.json', )
 all_maps_data = json.load(our_first_map_file)
 all_maps_data_copy = all_maps_data.copy()
 
+MAP_NUMBER = str(11)
+NUMBER_OF_CELLS = all_maps_data[MAP_NUMBER]["NUMBER_OF_CELLS"]
 
 
 class Game_state(Enum):
@@ -39,28 +40,26 @@ class Game_state(Enum):
 
 
 
-dfska_field = [["0" for x in range(NUMBER_OF_CELLS)] for y in range(NUMBER_OF_CELLS)]
-
-
+# dfska_field = [["0" for x in range(NUMBER_OF_CELLS)] for y in range(NUMBER_OF_CELLS)]
 # 'x' as cross
-def cross_maker():
-    for row in range(0, NUMBER_OF_CELLS):
-        for column in range(0, NUMBER_OF_CELLS):
-
-            if gui.horizontal_ship_counter[column] == 0 and dfska_field[row][column] != "x":
-                dfska_field[row][column] = "x"
-            if gui.vertical_ship_counter[row] == 0 and dfska_field[row][column] != "x":
-                dfska_field[row][column] = "x"
-            else:
-                # match int(all_maps_data[MAP_NUMBER][row][column]):
-                # case:
-
-                for xr in range(0, NUMBER_OF_CELLS):
-                    for yr in range(0, NUMBER_OF_CELLS):
-                        print(str(dfska_field[xr][yr]) + " ", end='')
-                    print('\n')
-                print('\n')
-                print("row: " + str(row) + " column: " + str(column))
+# def cross_maker():
+#     for row in range(0, NUMBER_OF_CELLS):
+#         for column in range(0, NUMBER_OF_CELLS):
+#
+#             if gui.horizontal_ship_counter[column] == 0 and dfska_field[row][column] != "x":
+#                 dfska_field[row][column] = "x"
+#             if gui.vertical_ship_counter[row] == 0 and dfska_field[row][column] != "x":
+#                 dfska_field[row][column] = "x"
+#             else:
+#                 # match int(all_maps_data[MAP_NUMBER][row][column]):
+#                 # case:
+#
+#                 for xr in range(0, NUMBER_OF_CELLS):
+#                     for yr in range(0, NUMBER_OF_CELLS):
+#                         print(str(dfska_field[xr][yr]) + " ", end='')
+#                     print('\n')
+#                 print('\n')
+#                 print("row: " + str(row) + " column: " + str(column))
 
 
 ######
@@ -95,70 +94,129 @@ def cross_maker():
 ######
 
 
-control_field = [[False for xa in range(NUMBER_OF_CELLS)] for ya in range(NUMBER_OF_CELLS)]
-control_field[2][2] = True
-# control_field[0][3] = True
-control_field[0][0] = True
-control_field[0][1] = True
-control_field[2][1] = True
+# control_field = [[False for xa in range(NUMBER_OF_CELLS)] for ya in range(NUMBER_OF_CELLS)]
+# control_field[2][2] = True
+# # control_field[0][3] = True
+# control_field[0][0] = True
+# control_field[0][1] = True
+# control_field[2][1] = True
 
 
 checking_array = [[False for x in range(NUMBER_OF_CELLS)] for y in range(NUMBER_OF_CELLS)]
 for a in range(0, NUMBER_OF_CELLS):
     for b in range(0, NUMBER_OF_CELLS):
-        if all_maps_data[MAP_NUMBER][a][b] != "0":
+        if all_maps_data[MAP_NUMBER]["map"][a][b] != "0":
             checking_array[a][b] = True
 
 
 print(checking_array)
 
-gui=Gui(NUMBER_OF_CELLS,all_maps_data[MAP_NUMBER])
-dfs_store=DFS(NUMBER_OF_CELLS, checking_array, gui)
+gui=Gui(NUMBER_OF_CELLS,all_maps_data[MAP_NUMBER]["map"])
 
+dfs_store=Dfs(NUMBER_OF_CELLS, checking_array, gui)
+forward_checking_mrv= ForwardChecking(NUMBER_OF_CELLS, all_maps_data[MAP_NUMBER], gui, MRV=True)
+forward_checking_lcv= ForwardChecking(NUMBER_OF_CELLS, all_maps_data[MAP_NUMBER], gui, LCV=True)
 
-def checker():
-    name_of_alg = "DFS"
+# backtracking_mrv= Backtracking(NUMBER_OF_CELLS, all_maps_data[MAP_NUMBER], gui, MRV=True)
+# backtracking_lcv= Backtracking(NUMBER_OF_CELLS, all_maps_data[MAP_NUMBER], gui, LCV=True)
+
+def refresh_reset():
+    dfs_store.reset()
+    forward_checking_lcv.reset()
+    forward_checking_mrv.reset()
+    drawer()
+
+def dfs():
+    refresh_reset()
+    name_of_alg = "Dfs"
     time_before=time.time()
-    print("PaIZKKKDFAS")
+    print("DFS")
     dfs_store.dfs()
     time_after=time.time()
     print("Time difference (s): " + str(time_after-time_before))
-    time_comp = time_after - time_before
     stats = Statistics(gui.screen)
-    stats.print_stats(time_comp,asizeof.asizeof(dfs_store.dfs()),dfs_store.iterations,name_of_alg)
+    stats.print_stats(time_after - time_before,asizeof.asizeof(dfs_store.dfs()),dfs_store.iterations,name_of_alg)
     # gui.draw_ships_algorithm(np.array(checking_array).flatten())
 
+
 def mrv_backtracking():
+    # refresh_reset()
     print("mrv_backtracking")
+#     TODO: mrv_backtracking
+
 def lcv_backtracking():
+    # refresh_reset()
     print("lcv_backtracking")
+#   TODO: lcv_backtracking
+
 def mrv_forward_checking():
+    refresh_reset()
+
     print("mrv_forward_checking")
+    name_of_alg = "forward_checking + MRV"
+    time_before = time.time()
+    forward_checking_mrv.convert_to_binary_map()
+    forward_checking_mrv.backtrack()
+    time_after = time.time()
+    print("Time difference (s): " + str(time_after - time_before))
+    stats = Statistics(gui.screen)
+    stats.print_stats(time_after - time_before, 100500, forward_checking_mrv.iterations, name_of_alg)
+
+
 def lcv_forward_checking():
+    refresh_reset()
+
     print("lcv_forward_checking")
+    name_of_alg = "forward_checking + LCV"
+    time_before = time.time()
+    forward_checking_lcv.convert_to_binary_map()
+    forward_checking_lcv.backtrack()
+    time_after = time.time()
+    print("Time difference (s): " + str(time_after - time_before))
+    stats = Statistics(gui.screen)
+    stats.print_stats(time_after - time_before, 100500, forward_checking_lcv.iterations, name_of_alg)
+
+buttonDFS = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'DFS', dfs)
+buttonMRV_backtracking = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'backtracking + MRV', mrv_backtracking)
+buttonLCV_backtracking = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'backtracking + LCV', lcv_backtracking)
+buttonMRV_forward_checking = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'forward checking + MRV', mrv_forward_checking)
+buttonLCV_forward_checking = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'forward checking LCV', lcv_forward_checking)
+
+
+def drawer():
+    gui.screen.fill(gui.WHITE)
+    gui.flotila_plavidel(gui.screen, gui.img_horizontal_left_edge, gui.img_horizontal_right_edge)
+    gui.draw_grid()
+    gui.draw_ships()
+    # TODO: buttons rendering in this function (not easy task)
+    pygame.display.update()
+
+
 
 def main():
     game_state = Game_state.PLAYING
 
     gui.screen.fill(gui.WHITE)
-    gui.fill_vertical_or_horizontal_ship_counter(vertical=False)
-    gui.fill_vertical_or_horizontal_ship_counter(vertical=True)
+    # gui.fill_vertical_or_horizontal_ship_counter(vertical=False)
+    # gui.fill_vertical_or_horizontal_ship_counter(vertical=True)
     gui.flotila_plavidel(gui.screen, gui.img_horizontal_left_edge, gui.img_horizontal_right_edge)
     gui.draw_grid()
 
     print(str(dfs_store.one_dimensional_answer_field))
-    buttonDFS = Button(gui.screen, gui.BLOCK_SIZE,120, 45, 'DFS+backtracking', checker)
-    buttonMRV_back = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'MRV+backtracking', mrv_backtracking)
-    buttonLCV_back = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'LCV+backtracking', lcv_backtracking)
-    buttonMRV_forward = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'MRV+forward checking', mrv_forward_checking)
-    buttonLCV_forward = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'LCV+forward checking', lcv_forward_checking)
+    # buttonDFS = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'DFS', dfs)
+    # buttonMRV_backtracking = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'backtracking + MRV', mrv_backtracking)
+    # buttonLCV_backtracking = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'backtracking + LCV', lcv_backtracking)
+    # buttonMRV_forward_checking = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'forward checking + MRV', mrv_forward_checking)
+    # buttonLCV_forward_checking = Button(gui.screen, gui.BLOCK_SIZE, 120, 45, 'forward checking LCV', lcv_forward_checking)
+
+
     buttonDFS.draw(800, 20)
-    buttonMRV_back.draw(800, 80)
-    buttonMRV_forward.draw(800, 140)
-    buttonLCV_back.draw(800, 200)
-    buttonLCV_forward.draw(800, 260)
+    buttonMRV_forward_checking.draw(800, 80)
+    buttonLCV_forward_checking.draw(800, 140)
+    buttonMRV_backtracking.draw(800, 200)
+    buttonLCV_backtracking.draw(800, 260)
+
     # button.draw(800, 200, 'Reset',None)
-    # pygame.display.update()
 
     # map_to_state_transfer()
     # for i in range(0,10):
@@ -178,7 +236,7 @@ def main():
 
     for xq in range(0, NUMBER_OF_CELLS):
         for yq in range(0, NUMBER_OF_CELLS):
-            print(str(all_maps_data_copy[MAP_NUMBER][xq][yq]) + " ", end='')
+            print(str(all_maps_data_copy[MAP_NUMBER]["map"][xq][yq]) + " ", end='')
         print('\n')
 
     # print('\n')
@@ -190,27 +248,24 @@ def main():
             #
             if event.type == pygame.MOUSEBUTTONDOWN:
                 buttonDFS.draw(800, 20)
-                buttonMRV_back.draw(800, 80)
-                buttonMRV_forward.draw(800, 140)
-                buttonLCV_back.draw(800, 200)
-                buttonLCV_forward.draw(800, 260)
+                buttonMRV_forward_checking.draw(800, 80)
+                buttonLCV_forward_checking.draw(800, 140)
+                buttonMRV_backtracking.draw(800, 200)
+                buttonLCV_backtracking.draw(800, 260)
             #     button.draw(800, 200, 'Reset', None)
             #     pygame.display.update()
             if event.type == pygame.MOUSEMOTION:
                 buttonDFS.draw(800, 20)
-                buttonMRV_back.draw(800, 80)
-                buttonMRV_forward.draw(800, 140)
-                buttonLCV_back.draw(800, 200)
-                buttonLCV_forward.draw(800, 260)
-                # button.draw(800, 20, 'DFS', checker())
-                # button.draw(800, 80, 'no name', None)
-                # button.draw(800, 140, 'no name', None)
+                buttonMRV_forward_checking.draw(800, 80)
+                buttonLCV_forward_checking.draw(800, 140)
+                buttonMRV_backtracking.draw(800, 200)
+                buttonLCV_backtracking.draw(800, 260)
                 # button.draw(800, 200, 'Reset', None)
             pygame.display.update()
 
 
 main()
-# dfs_class = DFS(NUMBER_OF_CELLS, checking_array)
+# dfs_class = Dfs(NUMBER_OF_CELLS, checking_array)
 pygame.quit()
 
 our_first_map_file.close()
