@@ -1,5 +1,5 @@
 import pygame
-from dfs import *
+
 
 class Statistics:
     def __init__(self,screen):

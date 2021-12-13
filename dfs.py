@@ -1,7 +1,4 @@
-# from main import *
-from statistics import *
 import numpy as np
-import time
 from pympler import asizeof
 
 class Dfs:
@@ -27,10 +24,18 @@ class Dfs:
 
 
     def array_comparator(self, array_to_compare):
+        if self.GAME_SOLVED:
+            return True
         if len(array_to_compare) == len(self.one_dimensional_answer_field):
-            # time.sleep(0.5)
-            self.gui.draw_ships_algorithm(array_to_compare, dimension=1)
+            for x in range(0, self.NUMBER_OF_CELLS):
+                for y in range(0, self.NUMBER_OF_CELLS):
+                    if array_to_compare[x * self.NUMBER_OF_CELLS + y]:
+                        print("O ", end='')
+                    else:
+                        print("X " , end='')
+                print()
 
+            self.gui.draw_ships_algorithm(array_to_compare, dimension=1)
             test = np.array(array_to_compare)
             comparison = test == self.one_dimensional_answer_field
             equal_arrays = comparison.all()
@@ -50,17 +55,7 @@ class Dfs:
                 self.size += asizeof.asizeof(i)
                 self.iterations += 1
                 print("Iterations: " + str(self.iterations))
-                #print(array)
-                # for xqr in range(0, len(self.dfs_array) - 1):
-                #     if self.dfs_array[xqr]:
-                #         print("1" + " ", end='')
-                #         #print(str(dfska_field[xq][yq]) + " ", end='')
-                #     else:
-                #         print("0" + " ", end='')
-                # for df in range(0, self.NUMBER_OF_CELLS * self.NUMBER_OF_CELLS - (len(self.dfs_array) - 1)):
-                #     print("  ", end='')
-                # print('\n')
-                # print(len(array))
+
                 if self.array_comparator(self.dfs_array):
                     return
                 self.dfs()

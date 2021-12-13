@@ -132,8 +132,7 @@ class Gui:
                                          'not declared new cell state with number:' +
                                          str(self.all_maps_data[y][x]) + '\n')
                 y_block_center = y_block_center + self.BLOCK_SIZE
-                # print("x_block_center CHECKER: " + str(x_block_center))
-                # print("y_block_center CHECKER: " + str(y_block_center))
+
             y_block_center = self.UPPER_INDENT + self.BLOCK_SIZE / 2
             x_block_center = x_block_center + self.BLOCK_SIZE
 
@@ -143,23 +142,18 @@ class Gui:
     def draw_ships_algorithm(self, array_to_compare, dimension):
         row_block_center = self.UPPER_INDENT + self.BLOCK_SIZE / 2
         column_block_center = self.UPPER_INDENT + self.BLOCK_SIZE*20
-
         circle_radius = 8
 
-        # print("row_block_center: " + str(row_block_center))
-        # print("column_block_center: " + str(column_block_center))
         for x in range(0, self.NUMBER_OF_CELLS):
             for y in range(0, self.NUMBER_OF_CELLS):
                 if (array_to_compare[x * self.NUMBER_OF_CELLS + y] if dimension == 1
                             else  (array_to_compare[x][ y] if dimension == 2 else None)):
-                    print("1" + " ", end='')
-                    #print(str(dfska_field[xq][yq]) + " ", end='')
+                    print("O" + " ", end='')
+
                 else:
-                    print("0" + " ", end='')
+                    print("X" + " ", end='')
             print()
 
-        # pygame.draw.circle(self.screen, self.BLACK, (column_block_center,row_block_center), circle_radius * 20)
-        # pygame.display.update()
         for x in range(0, self.NUMBER_OF_CELLS):
             for y in range(0, self.NUMBER_OF_CELLS):
 
@@ -181,8 +175,6 @@ class Gui:
 
             column_block_center = self.UPPER_INDENT + self.BLOCK_SIZE*20
             row_block_center = row_block_center + self.BLOCK_SIZE
-            # print("row_block_center in cycle: " + str(row_block_center))
-            # print("column_block_center in cycle: " + str(column_block_center))
         pygame.display.update()
 
 
@@ -191,10 +183,6 @@ class Gui:
             # horizontal grid1
             pygame.draw.line(self.screen, self.BLACK, (self.LEFT_INDENT, self.UPPER_INDENT + i * self.BLOCK_SIZE),
                              (self.LEFT_INDENT + self.NUMBER_OF_CELLS * self.BLOCK_SIZE, self.UPPER_INDENT + i * self.BLOCK_SIZE), 1)
-
-            # print(str(LEFT_INDENT) + ',' + str(UPPER_INDENT + i * BLOCK_SIZE) + ";", end='')
-            # print(str(LEFT_INDENT + 10 * BLOCK_SIZE) + ',' + str(UPPER_INDENT + i * BLOCK_SIZE))
-            # print('***')
 
             # vertical grid1
             pygame.draw.line(self.screen, self.BLACK, (self.LEFT_INDENT + i * self.BLOCK_SIZE, self.UPPER_INDENT), (self.LEFT_INDENT + i * self.BLOCK_SIZE, self.UPPER_INDENT + self.NUMBER_OF_CELLS * self.BLOCK_SIZE), 1)
@@ -242,14 +230,12 @@ class Button:
     def draw(self, x, y):
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        # if x < mouse[0] < x + self.width:
-        #     if y < mouse[1] < y + self.height:
+
         if pygame.Rect(x, y, self.width, self.height).collidepoint((mouse[0], mouse[1])):
             pygame.draw.rect(self.screen, self.active_color, (x, y, self.width, self.height))
             if pygame.mouse.get_pressed() == (1, 0, 0):
                 if self.action is not None:
                     self.action()
-                    # TODO: ...
         else:
             pygame.draw.rect(self.screen, self.inactive_color, (x, y, self.width, self.height))
 

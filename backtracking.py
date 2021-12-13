@@ -1,9 +1,5 @@
-import sys
-from enum import Enum
-import numpy as np
-
-from gui import *
 from pympler import asizeof
+from gui import *
 
 
 class Orientation(Enum):
@@ -72,19 +68,13 @@ class Backtracking:
                     +asizeof.asizeof(self.vertical_ship_counter) + asizeof.asizeof(
             self.horizontal_ship_counter) + asizeof.asizeof(self.ships_to_place) + \
                     +asizeof.asizeof(self.ship_start_row_posit) + asizeof.asizeof(
-            self.ship_start_col_posit) + asizeof.asizeof(self.ship_start_pos_orien) + \
-                    +asizeof.asizeof(self.size)
-        if self.mrv:
-            print("mrv")
-        if self.lcv:
-            print("lcv")
-        # print("length is: " + str(len(two_dimensional_answer_field)))
+            self.ship_start_col_posit) + asizeof.asizeof(self.ship_start_pos_orien)
+
         field = [[0 for xa in range(len(self.two_dimensional_answer_field))] for ya in
                  range(len(self.two_dimensional_answer_field))]
-        # print("length 1 is: " + str(len(two_dimensional_answer_field)))
+
         for row in range(0, len(self.two_dimensional_answer_field)):
             for column in range(0, len(self.two_dimensional_answer_field)):
-                # print("length. row" + str(row) + "column"+ str(column) + str(len(two_dimensional_answer_field)))
                 if self.two_dimensional_answer_field[row][column] == "0":
                     field[row][column] = 0
                     print("0 ", end="")
@@ -94,45 +84,29 @@ class Backtracking:
                 else:
                     sys.stderr.write("OOOps, problems convert_to_binary_map()...")
             print()
-        print("converted successfully")
+        print("Map was converted successfully!")
         self.converted_two_dimensional_answer_field = field
         self.size += asizeof.asizeof(field)
 
 
     def array_comparator(self):
+        if self.GAME_SOLVED:
+            return True
         # define according to ships left to place list
-        print()
-        for x in range(0, self.NUMBER_OF_CELLS):
-            for y in range(0, self.NUMBER_OF_CELLS):
-                if self.generated_array[x][y] == 1:
-                    print("1" + " ", end='')
-                else:
-                    print("0" + " ", end='')
-            print()
-        print()
-
-        print("ships NOT placed: " + str(self.ships_to_place))
         if len(self.ships_to_place) == 0:
             self.gui.draw_ships_algorithm(self.generated_array, dimension=2)
-            # self.GAME_SOLVED = True
-            # print("GAME SOLVED .ships_to_place==0: top !!!")
-            # for row in range(self.NUMBER_OF_CELLS):
-            #     for column in range(self.NUMBER_OF_CELLS):
-            #         print(self.generated_array[row][column], end="")
-            #     print()
-            # print()
-            # for row in range(self.NUMBER_OF_CELLS):
-            #     for column in range(self.NUMBER_OF_CELLS):
-            #         print(self.converted_two_dimensional_answer_field[row][column], end="")
-            #     print()
-            # print()
-            # print("GAME SOLVED .ships_to_place==0: bottom !!!")
+            for x in range(0, self.NUMBER_OF_CELLS):
+                for y in range(0, self.NUMBER_OF_CELLS):
+                    if self.generated_array[x][y] == 1:
+                        print("O" + " ", end='')
+                    else:
+                        print("X" + " ", end='')
+                print()
 
             if self.generated_array == self.converted_two_dimensional_answer_field:
                 self.GAME_SOLVED = True
-                print("GAME auauuauauauauaua!!!")
+                print("GAME solved!!!")
 
-        # if np.array_equal(np.array(self.generated_array),np.array(self.converted_two_dimensional_answer_field)):
         if self.generated_array == self.converted_two_dimensional_answer_field:
             self.GAME_SOLVED = True
             print("GAME SOLVED!!!")
@@ -140,11 +114,11 @@ class Backtracking:
         return False
 
     def backtrack(self):
-        if self.GAME_SOLVED:
-            return True
         if self.array_comparator():
             return True
         self.iterations += 1
+        print("Iterations: " + str(self.iterations))
+
         for i in range(0, len(self.ships_to_place)):
             size = self.ships_to_place[i]
             self.size += asizeof.asizeof(size)
@@ -220,8 +194,7 @@ class Backtracking:
                 self.horizontal_ship_counter[col] -= size
         else:
             sys.stderr.write("OOOps, problems update_row_col_counters()...")
-        # print(self.horizontal_ship_counter)
-        # print(self.vertical_ship_total)
+
 
     def place_ship(self, row, col, size, orientation):
         # check that placement is within bounds of grid
@@ -289,36 +262,7 @@ class Backtracking:
         possible_movements = []
         for row in range(0, self.NUMBER_OF_CELLS):
             for col in range(0, self.NUMBER_OF_CELLS):
-                # adjacent = self.adjacent_ships(row, col, size, orientation)
-                valid = True
-                self.size += asizeof.asizeof(valid)
-                # if self.horizontal_ship_total[row] == 0:
-                #     valid = False
-                # elif self.horizontal_ship_total[col] == 0:
-                #     valid = False
-                # elif adjacent:
-                #     valid = False
-                # else:
-                # try:
-                #     if orientation == Orientation.HORIZONTAL:
-                #         for i in range(col, col + size):
-                #             if self.horizontal_ship_counter[i] + 1 > self.horizontal_ship_total[i]:
-                #                 valid = False
-                #         if self.vertical_ship_counter[row] + size > self.vertical_ship_total[row]:
-                #             valid = False
-                #     elif orientation == Orientation.VERTICAL:
-                #         for i in range(row, row + size):
-                #             if self.vertical_ship_counter[i] + 1 > self.vertical_ship_total[i]:
-                #                 valid = False
-                #         if self.horizontal_ship_counter[col] + size > self.horizontal_ship_total[col]:
-                #             valid = False
-                #     else:
-                #         sys.stderr.write("OOOps, problems find_possib_positions()...")
-                #
-                # except IndexError:
-                #     valid = False
-                if valid:
-                    possible_movements.append([row, col])
+                possible_movements.append([row, col])
         return possible_movements
 
 
